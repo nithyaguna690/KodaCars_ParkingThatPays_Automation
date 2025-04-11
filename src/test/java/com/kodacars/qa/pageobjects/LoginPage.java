@@ -9,13 +9,19 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.kodacars.qa.uilities.CommonUtils;
-
 public class LoginPage {
 	WebDriver driver;
 	WebDriverWait wait;
-	CommonUtils utilsObj = CommonUtils.getInstance(driver);
-	
+	WebDriverWait longwait;
+	public LoginPage(WebDriver driver) {
+		if (driver == null) {
+			throw new IllegalArgumentException("Driver instance cannot be null");
+		}
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		this.longwait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
 	
 	@FindBy(xpath = "//input[@formcontrolname='userName']")
 	@CacheLookup
@@ -40,13 +46,6 @@ public class LoginPage {
 		return new DashboardPage(driver);
 	}
 
-	public LoginPage(WebDriver driver) {
-		if (driver == null) {
-			throw new IllegalArgumentException("Driver instance cannot be null");
-		}
-		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		this.driver = driver;
-		PageFactory.initElements(driver, this);
-	}
+	
 
 }

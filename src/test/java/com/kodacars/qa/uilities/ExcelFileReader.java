@@ -5,12 +5,18 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelFileReader {
@@ -46,7 +52,7 @@ public class ExcelFileReader {
 	    case NUMERIC:
 	        if (DateUtil.isCellDateFormatted(cell)) {
 	            Date date = cell.getDateCellValue();
-	            return new SimpleDateFormat("M/d").format(date); // e.g., 9/27
+	            return new SimpleDateFormat("M/d").format(date); 
 	        } else {
 	            double value = cell.getNumericCellValue();
 	            if (value == (long) value) {
@@ -55,7 +61,6 @@ public class ExcelFileReader {
 	                return String.valueOf(value); // Keep decimal if needed   78956.2365
 	            }
 	        }
-
 	    case BLANK:
 	        return "";
 	    default:

@@ -6,6 +6,8 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
@@ -20,7 +22,19 @@ public class DashboardPage {
 
 	WebDriver driver;
 	WebDriverWait wait;
+	WebDriverWait longwait;
 	CommonUtils utilsObj = CommonUtils.getInstance(driver);
+
+	public DashboardPage(WebDriver driver) {
+
+		if (driver == null) {
+			throw new IllegalArgumentException("Driver instance cannot be null");
+		}
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		this.longwait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
 
 	@FindBy(xpath = "//button[text()=' Add Reservation ']")
 	@CacheLookup
@@ -70,16 +84,6 @@ public class DashboardPage {
 		} catch (ElementClickInterceptedException e) {
 			((JavascriptExecutor) driver).executeScript("arguments[0].click();", addReservationButton);
 		}
-	}
-
-	public DashboardPage(WebDriver driver) {
-
-		if (driver == null) {
-			throw new IllegalArgumentException("Driver instance cannot be null");
-		}
-		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		this.driver = driver;
-		PageFactory.initElements(driver, this);
 	}
 
 	public AddReservationPage clickLinkByConfirmationNumber(String confirmationNumber) {

@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PaymentPage {
+
 	WebDriverWait wait;
 	WebDriver driver;
 	String currentWindowHandle;

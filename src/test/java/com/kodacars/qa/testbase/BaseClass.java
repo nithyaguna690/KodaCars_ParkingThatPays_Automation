@@ -32,8 +32,7 @@ public class BaseClass {
 	public void setup(@Optional("Chrome") String browser) {
 		if (browser.equals("Chrome")) {
 			ChromeOptions options = new ChromeOptions();
-		
-				options.addArguments("--disable-blink-features=Autofill");
+			options.addArguments("--disable-blink-features=Autofill");
 				options.setExperimentalOption("prefs", Map.of(
 				    "credentials_enable_service", false,
 				    "profile.password_manager_enabled", false,
@@ -57,7 +56,7 @@ public class BaseClass {
 	@AfterMethod
 	public void close() {
 		 if (driver != null) {
-		      driver.quit();
+			 driver.quit();
 		    }
 	}
 
