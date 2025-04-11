@@ -17,7 +17,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 import com.github.javafaker.Faker;
 import com.kodacars.qa.uilities.CommonUtils;
@@ -27,8 +26,8 @@ public class AddReservationPage {
 	WebDriverWait wait;
 	WebDriverWait longwait;
 	WebDriver driver;
-	 private double totalAmount;
-	 private double prepaidAmount;
+	private double totalAmount;
+	private double prepaidAmount;
 	CommonUtils utilsObj = CommonUtils.getInstance(driver);
 
 	public AddReservationPage(WebDriver driver) {
@@ -160,13 +159,6 @@ public class AddReservationPage {
 	@CacheLookup
 	private WebElement selectThirdPartySource;
 
-//	@FindBy(xpath = "//input[@formcontrolname='prepaidAmount']")
-//	@CacheLookup
-//	private WebElement prepaidAmount;
-//	@FindBy(xpath = "//input[@formcontrolname='prepaidAmount']")
-//	@CacheLookup
-//	private WebElement prepaidAmount;
-
 	@FindBy(xpath = "//div[@class='modal-footer']//button[text()='Search']")
 	@CacheLookup
 	private WebElement searchBtn;
@@ -248,33 +240,6 @@ public class AddReservationPage {
 		selectLocation.click();
 	}
 
-//	public void selectLocationDropdown() {
-//	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-//
-//	    // Wait for any modal overlay to disappear
-//	    wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-backdrop")));
-//
-//	    // Locate the dropdown input element
-//	    By locationInputLocator = By.xpath("//ng-select[@bindlabel='name' and @formcontrolname='location']//input");
-//	    WebElement locationInput = wait.until(ExpectedConditions.presenceOfElementLocated(locationInputLocator));
-//
-//	    // Scroll into view
-//	    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", locationInput);
-//
-//	    // Wait for the input to be clickable
-//	    wait.until(ExpectedConditions.elementToBeClickable(locationInput));
-//
-//	    // Try clicking the input
-//	    try {
-//	        locationInput.click();
-//	    } catch (ElementClickInterceptedException e) {
-//	        // Fallback to JS click if intercepted
-//	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", locationInput);
-//	    }
-//
-//	    System.out.println("Clicked on location dropdown input.");
-//	}
-
 	public void selectSource(String selectSourceName) {
 		utilsObj.elementToBeClickableWaitTime(selectSourcedropdown);
 		selectSourcedropdown.click();
@@ -309,294 +274,102 @@ public class AddReservationPage {
 		enterEndTime.sendKeys("06:30 PM");
 	}
 
-//	public void selectReservationPrepaidOrPartial2(String prepaid) {
-//		prepaidPartial.sendKeys(prepaid, Keys.ENTER);
-//	}
-
 	public void selectReservationPrepaid(String prepaid) {
 		prepaidPartial.sendKeys(prepaid, Keys.ENTER);
 	}
 
-//	public void enterTotalAmount() {
-//		//WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-//		WebElement totalAmountInput = wait.until(
-//				ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='totalAmount']")));
-//		totalAmountInput.sendKeys("30");
-//	}
-//
-//	public void enterPrepaidAmount() {
-//		// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//		 wait.until(ExpectedConditions.visibilityOf(prepaidAmount));
-//		
-//	}
-//	public void enterPrepaidAmount() {
-//		// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//		WebElement totalAmountField = wait.until(ExpectedConditions.visibilityOf(prepaidAmount));
-//		totalAmountField.sendKeys("10");
-//	}
-	
-	
-	 // Elements - located by Page Factory annotations
-    @FindBy(xpath = "//input[@formcontrolname='totalAmount']")
-    private WebElement totalAmountInput;
+	@FindBy(xpath = "//input[@formcontrolname='totalAmount']")
+	private WebElement totalAmountInput;
 
-    @FindBy(xpath = "//input[@formcontrolname='prepaidAmount']")
-    private WebElement prepaidAmountInput;
+	@FindBy(xpath = "//input[@formcontrolname='prepaidAmount']")
+	private WebElement prepaidAmountInput;
 
-    @FindBy(xpath = "//input[@formcontrolname='dueAmount']")
-    private WebElement dueAmountInput;
-    
-    public void enterTotalAmount(double amount) {
-        this.totalAmount = amount;
-        wait.until(ExpectedConditions.visibilityOf(totalAmountInput)).clear();
-        totalAmountInput.sendKeys(String.valueOf(amount));
-    }
+	@FindBy(xpath = "//input[@formcontrolname='dueAmount']")
+	private WebElement dueAmountInput;
 
-    public void enterPrepaidAmount(double amount) {
-        this.prepaidAmount = amount;
-        wait.until(ExpectedConditions.visibilityOf(prepaidAmountInput)).clear();
-        prepaidAmountInput.sendKeys(String.valueOf(amount));
-    }
-   
-//    public void validateDueAmount() {
-//        // Wait until the document is completely loaded
-//        JavascriptExecutor js = (JavascriptExecutor) driver;
-//        boolean isPageLoaded = js.executeScript("return document.readyState").equals("complete");
-//
-//        // Log the status of the page load for debugging
-//        System.out.println("Page load complete: " + isPageLoaded);
-//
-//        // If the page isn't fully loaded, handle accordingly
-//        if (!isPageLoaded) {
-//            throw new AssertionError("❌ Page not fully loaded, cannot validate due amount.");
-//        }
-//
-//        // Check if the modal is present and close it if necessary
-//        try {
-//            // Wait for the modal backdrop to be visible, if it's there
-//            WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-backdrop.fade.show")));
-//            
-//            if (modal.isDisplayed()) {
-//                // Handle closing the modal or wait for it to disappear
-//                WebElement closeButton = driver.findElement(By.cssSelector(".modal .close"));
-//                closeButton.click(); // Close the modal
-//                // Optionally wait for modal to disappear
-//                wait.until(ExpectedConditions.invisibilityOf(modal));
-//            }
-//        } catch (NoSuchElementException | TimeoutException e) {
-//            // Modal not found or not visible, continue with the test
-//            System.out.println("Modal not found or not visible, continuing with the test.");
-//        }
-//
-//        // Wait for the due amount input field to be present and clickable
-//        final WebElement dueField = wait.until(ExpectedConditions.presenceOfElementLocated(
-//            By.cssSelector("input[formcontrolname='dueAmount']")));
-//        
-//        // Now that it's present in the DOM, wait until it is clickable
-//        wait.until(ExpectedConditions.elementToBeClickable(dueField));
-//
-//        // Log the value before checking it
-//        String value = dueField.getDomAttribute("value");
-//        System.out.println("Due amount field value: " + value);
-//
-//        // Wait until the due amount field has a non-empty value
-//        wait.until(driver -> {
-//            String updatedValue = dueField.getDomAttribute("value");
-//            System.out.println("Current due amount value: " + updatedValue); // Log the value
-//            return updatedValue != null && !updatedValue.trim().isEmpty();
-//        });
-//
-//        // Fetch the actual due amount value
-//        String actualDueStr = dueField.getDomAttribute("value");
-//        if (actualDueStr == null || actualDueStr.trim().isEmpty()) {
-//            throw new AssertionError("❌ Due amount is empty");
-//        }
-//
-//        double actualDue = Double.parseDouble(actualDueStr);
-//
-//        // Ensure totalAmount and prepaidAmount are set correctly
-//        System.out.println("Total Amount: " + totalAmount);
-//        System.out.println("Prepaid Amount: " + prepaidAmount);
-//
-//        double expectedDue = totalAmount - prepaidAmount;
-//
-//        // Compare expected and actual due amounts
-//        if (Math.round(actualDue * 100) != Math.round(expectedDue * 100)) {
-//            throw new AssertionError("❌ Due amount mismatch. Expected: " + expectedDue + ", but was: " + actualDue);
-//        }
-//
-//        System.out.println("✅ Due amount is correct: " + actualDue);
-//
-//        // Wait for the input field to be clickable again (if needed)
-//        WebElement inputElement = wait.until(ExpectedConditions.elementToBeClickable(dueField));
-//
-//        // Click the input field
-//        inputElement.click();
-//    }
-//
+	public void enterTotalAmount(double amount) {
+		this.totalAmount = amount;
+		wait.until(ExpectedConditions.visibilityOf(totalAmountInput)).clear();
+		totalAmountInput.sendKeys(String.valueOf(amount));
+	}
 
-    
-//    public void validateDueAmount() {
-//        // Wait until the document is completely loaded
-//        JavascriptExecutor js = (JavascriptExecutor) driver;
-//        boolean isPageLoaded = js.executeScript("return document.readyState").equals("complete");
-//
-//        // Log the status of the page load for debugging
-//        System.out.println("Page load complete: " + isPageLoaded);
-//
-//        // If the page isn't fully loaded, handle accordingly
-//        if (!isPageLoaded) {
-//            throw new AssertionError("❌ Page not fully loaded, cannot validate due amount.");
-//        }
-//
-//        // Check if the modal is present and close it if necessary
-//        try {
-//            // Wait for the modal backdrop to be visible, if it's there
-//            WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-backdrop.fade.show")));
-//            
-//            if (modal.isDisplayed()) {
-//                // Handle closing the modal or wait for it to disappear
-//                WebElement closeButton = driver.findElement(By.cssSelector(".modal .close"));
-//                closeButton.click(); // Close the modal
-//                // Optionally wait for modal to disappear
-//                wait.until(ExpectedConditions.invisibilityOf(modal));
-//            }
-//        } catch (NoSuchElementException | TimeoutException e) {
-//            // Modal not found or not visible, continue with the test
-//            System.out.println("Modal not found or not visible, continuing with the test.");
-//        }
-//
-//        // Wait until the due amount input field is present
-//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-//        WebElement dueField = wait.until(ExpectedConditions.presenceOfElementLocated(
-//            By.cssSelector("input[formcontrolname='dueAmount']")));
-//        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[formcontrolname='dueAmount']")));
-//    wait.until(ExpectedConditions.not(
-//            ExpectedConditions.textToBePresentInElementValue(dueField, "")));
-//
-//
-//        // Wait until the value is not empty (dynamic wait)
-//        wait.until(ExpectedConditions.attributeToBeNotEmpty(dueField, "value"));
-//
-//        String dueAmountValue = dueField.getDomAttribute("value");
-//        System.out.println("Due amount value: " + dueAmountValue);
-//
-//        // Ensure that the value is not null or empty
-//        if (dueAmountValue == null || dueAmountValue.trim().isEmpty()) {
-//            throw new AssertionError("❌ Due amount field value is empty or null.");
-//        }
-//
-//        // Convert the value to a double safely
-//        double actualDue = 0.0;
-//        try {
-//            actualDue = Double.parseDouble(dueAmountValue);
-//        } catch (NumberFormatException e) {
-//            throw new AssertionError("❌ Due amount value is not a valid number.");
-//        }
-//
-//        // Continue with the rest of your validation logic
-//        System.out.println("Total Amount: " + totalAmount);
-//        System.out.println("Prepaid Amount: " + prepaidAmount);
-//
-//        double expectedDue = totalAmount - prepaidAmount;
-//
-//        // Compare expected and actual due amounts
-//        if (Math.round(actualDue * 100) != Math.round(expectedDue * 100)) {
-//            throw new AssertionError("❌ Due amount mismatch. Expected: " + expectedDue + ", but was: " + actualDue);
-//        }
-//
-//        System.out.println("✅ Due amount is correct: " + actualDue);
-//
-//        // Wait for the input field to be clickable again (if needed)
-//        WebElement inputElement = wait.until(ExpectedConditions.elementToBeClickable(dueField));
-//
-//        // Scroll the element into view to ensure it's interactable
-//        js.executeScript("arguments[0].scrollIntoView(true);", inputElement);
-//
-//        // Use JavaScript to click the input field if it's blocked
-//        js.executeScript("arguments[0].click();", inputElement);
-//    }
-   
-    public void validateDueAmount() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30)); // Define WebDriverWait once at the start
-        
-        // Wait until the document is completely loaded
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        boolean isPageLoaded = js.executeScript("return document.readyState").equals("complete");
+	public void enterPrepaidAmount(double amount) {
+		this.prepaidAmount = amount;
+		wait.until(ExpectedConditions.visibilityOf(prepaidAmountInput)).clear();
+		prepaidAmountInput.sendKeys(String.valueOf(amount));
+	}
 
-        // Log the status of the page load for debugging
-        System.out.println("Page load complete: " + isPageLoaded);
+	public void validateDueAmount() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30)); // Define WebDriverWait once at the
+																				// start
 
-        // If the page isn't fully loaded, handle accordingly
-        if (!isPageLoaded) {
-            throw new AssertionError("❌ Page not fully loaded, cannot validate due amount.");
-        }
+		// Wait until the document is completely loaded
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		boolean isPageLoaded = js.executeScript("return document.readyState").equals("complete");
 
-        // Check if the modal is present and close it if necessary
-        try {
-            // Wait for the modal backdrop to be visible, if it's there
-            WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-backdrop.fade.show")));
-            
-            if (modal.isDisplayed()) {
-                // Handle closing the modal or wait for it to disappear
-                WebElement closeButton = driver.findElement(By.cssSelector(".modal .close"));
-                closeButton.click(); // Close the modal
-                // Optionally wait for modal to disappear
-                wait.until(ExpectedConditions.invisibilityOf(modal));
-            }
-        } catch (NoSuchElementException | TimeoutException e) {
-            // Modal not found or not visible, continue with the test
-            System.out.println("Modal not found or not visible, continuing with the test.");
-        }
+		System.out.println("Page load complete: " + isPageLoaded);
 
-        // Wait until the due amount input field is present, visible, and clickable
-        WebElement dueField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[formcontrolname='dueAmount']")));
+		// If the page isn't fully loaded, handle accordingly
+		if (!isPageLoaded) {
+			throw new AssertionError("❌ Page not fully loaded, cannot validate due amount.");
+		}
 
-        // Wait until the value is not empty
-        wait.until(ExpectedConditions.attributeToBeNotEmpty(dueField, "value"));
-        
-        // Ensure the field's value is not empty or null
-        String dueAmountValue = dueField.getDomProperty("value");
-        System.out.println("Due amount value: " + dueAmountValue);
+		// Check if the modal is present and close it if necessary
+		try {
+			// Wait for the modal backdrop to be visible, if it's there
+			WebElement modal = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-backdrop.fade.show")));
 
-        if (dueAmountValue == null || dueAmountValue.trim().isEmpty()) {
-            throw new AssertionError("❌ Due amount field value is empty or null.");
-        }
+			if (modal.isDisplayed()) {
+				// Handle closing the modal or wait for it to disappear
+				WebElement closeButton = driver.findElement(By.cssSelector(".modal .close"));
+				closeButton.click(); // Close the modal
+				// Optionally wait for modal to disappear
+				wait.until(ExpectedConditions.invisibilityOf(modal));
+			}
+		} catch (NoSuchElementException | TimeoutException e) {
+			// Modal not found or not visible, continue with the test
+			System.out.println("Modal not found or not visible, continuing with the test.");
+		}
 
-        // Convert the value to a double safely
-        double actualDue = 0.0;
-        try {
-            actualDue = Double.parseDouble(dueAmountValue);
-        } catch (NumberFormatException e) {
-            throw new AssertionError("❌ Due amount value is not a valid number.");
-        }
+		WebElement dueField = wait
+				.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[formcontrolname='dueAmount']")));
+		wait.until(ExpectedConditions.attributeToBeNotEmpty(dueField, "value"));
 
-        // Log total and prepaid amounts
-        System.out.println("Total Amount: " + totalAmount);
-        System.out.println("Prepaid Amount: " + prepaidAmount);
+		// Ensure the field's value is not empty or null
+		String dueAmountValue = dueField.getDomProperty("value");
+		System.out.println("Due amount value: " + dueAmountValue);
 
-        // Compare expected and actual due amounts
-        double expectedDue = totalAmount - prepaidAmount;
-        if (Math.round(actualDue * 100) != Math.round(expectedDue * 100)) {
-            throw new AssertionError("❌ Due amount mismatch. Expected: " + expectedDue + ", but was: " + actualDue);
-        }
+		if (dueAmountValue == null || dueAmountValue.trim().isEmpty()) {
+			throw new AssertionError("Due amount field value is empty or null.");
+		}
 
-        System.out.println("✅ Due amount is correct: " + actualDue);
+		double actualDue = 0.0;
+		try {
+			actualDue = Double.parseDouble(dueAmountValue);
+		} catch (NumberFormatException e) {
+			throw new AssertionError(" Due amount value is not a valid number.");
+		}
 
-        // Scroll the element into view to ensure it's interactable, and click if needed
-        js.executeScript("arguments[0].scrollIntoView(true);", dueField);
-        js.executeScript("arguments[0].click();", dueField);
-    }
+		System.out.println("Total Amount: " + totalAmount);
+		System.out.println("Prepaid Amount: " + prepaidAmount);
 
-//******************************************888
+		double expectedDue = totalAmount - prepaidAmount;
+		if (Math.round(actualDue * 100) != Math.round(expectedDue * 100)) {
+			throw new AssertionError(" Due amount mismatch. Expected: " + expectedDue + ", but was: " + actualDue);
+		}
+
+		System.out.println(" Due amount is correct: " + actualDue);
+		js.executeScript("arguments[0].scrollIntoView(true);", dueField);
+		js.executeScript("arguments[0].click();", dueField);
+	}
+
 	public void clicksearchBtn() {
-		// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(searchBtn));
 		searchButton.click();
 	}
 
 	public void enterConfirmationNumber(String ConfirmationNum) {
-		// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement confirmationField = wait.until(ExpectedConditions.visibilityOf(enterConfirmationNumber));
 		confirmationField.sendKeys(ConfirmationNum);
 	}
@@ -684,7 +457,8 @@ public class AddReservationPage {
 
 	public boolean isReservationSuccessBtnDisplayed() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-content']/div[@class='p-3 m-auto']/div/button[text()='Ok']")));
+		WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("//div[@class='modal-content']/div[@class='p-3 m-auto']/div/button[text()='Ok']")));
 		return element.isDisplayed();
 	}
 
@@ -818,7 +592,7 @@ public class AddReservationPage {
 		enterEndDate();
 		enterEndTime();
 		selectReservationPrepaid(PrepaidPartial);
-		enterTotalAmount(30); //prepaid total
+		enterTotalAmount(30); 
 		enterPrepaidAmount(15);
 		validateDueAmount();
 
@@ -833,43 +607,11 @@ public class AddReservationPage {
 		selectState(state);
 		clickCreateReservation();
 		boolean isOkBtnDispalyed = isReservationSuccessBtnDisplayed();
-		System.out.println("Condition being tested: " + isOkBtnDispalyed);  // Log the value
-		//Assert.assertTrue(isOkBtnDispalyed);
-
+		System.out.println("Condition being tested: " + isOkBtnDispalyed); 
 		clickReservationSuccessBtn();
 		return isOkBtnDispalyed;
 
 	}
-	
-	public void validateDueAmount(double expectedTotal, double expectedPrepaid) {
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-	    
-	    // Wait for dueAmount field to be visible
-	    WebElement dueAmountField = wait.until(
-	        ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='dueAmount']"))
-	    );
-
-	    // Check if it's readonly
-	    String isReadonly = dueAmountField.getAttribute("readonly");
-	    if (isReadonly == null) {
-	        throw new AssertionError("Due amount field is not readonly!");
-	    }
-
-	    // Get the actual value in the field
-	    String actualValueStr = dueAmountField.getAttribute("value");
-	    double actualValue = Double.parseDouble(actualValueStr);
-
-	    // Calculate expected due amount
-	    double expectedDue = expectedTotal - expectedPrepaid;
-
-	    // Compare expected and actual values (allowing for minor float differences)
-	    if (Math.abs(actualValue - expectedDue) > 0.01) {
-	        throw new AssertionError("Expected due amount: " + expectedDue + ", but found: " + actualValue);
-	    }
-
-	    System.out.println("✅ Due amount validated successfully: " + actualValue);
-	}
-
 
 	public void clickOkButton() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));

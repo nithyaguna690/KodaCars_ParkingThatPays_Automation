@@ -24,7 +24,7 @@ public class DashboardPage {
 	WebDriverWait wait;
 	WebDriverWait longwait;
 	CommonUtils utilsObj = CommonUtils.getInstance(driver);
-	
+
 	public DashboardPage(WebDriver driver) {
 
 		if (driver == null) {
@@ -64,39 +64,6 @@ public class DashboardPage {
 		clickYesConfirmation.click();
 		return new AddReservationPage(driver);
 	}
-	
-	//public void clickSubmitButton() {
-//	public AddReservationPage clickYesConfirmation() {
-//
-//	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//
-//	    try {
-//	        // Wait for any overlay to disappear before interacting with the button
-//	        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".overlay.ng-star-inserted")));
-//
-//	        // Find the submit button
-//	        WebElement button = driver.findElement(By.xpath("//button[text()='Yes']"));
-//	        
-//	        // Scroll the button into view if needed
-//	        JavascriptExecutor js = (JavascriptExecutor) driver;
-//	        js.executeScript("arguments[0].scrollIntoView(true);", button);
-//
-//	        // Now click the button
-//	        button.click();
-//	        
-//	    } catch (TimeoutException e) {
-//	        System.out.println("Timeout waiting for overlay to disappear.");
-//	    } catch (ElementClickInterceptedException e) {
-//	        System.out.println("Element click intercepted, trying JS click.");
-//	        // Fallback to JS click
-//	        WebElement button = driver.findElement(By.xpath("//button[text()='Yes']"));
-//	        JavascriptExecutor js = (JavascriptExecutor) driver;
-//	        js.executeScript("arguments[0].click();", button);
-//	    }
-//	    return new AddReservationPage(driver);
-//	}
-
-
 
 	public void clickAddReservation() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -118,8 +85,6 @@ public class DashboardPage {
 			((JavascriptExecutor) driver).executeScript("arguments[0].click();", addReservationButton);
 		}
 	}
-
-	
 
 	public AddReservationPage clickLinkByConfirmationNumber(String confirmationNumber) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
