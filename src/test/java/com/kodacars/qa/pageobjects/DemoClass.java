@@ -325,4 +325,109 @@ public class DemoClass {
 //            System.out.println("Fallback JS click used for element: " + element);
 //        }
 //    }
+	
+//	public void enterTotalAmount() {
+//	//WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//	WebElement totalAmountInput = wait.until(
+//			ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='totalAmount']")));
+//	totalAmountInput.sendKeys("30");
+//}
+//
+//public void enterPrepaidAmount() {
+//	// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//	 wait.until(ExpectedConditions.visibilityOf(prepaidAmount));
+//	
+//}
+//public void enterPrepaidAmount() {
+//	// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//	WebElement totalAmountField = wait.until(ExpectedConditions.visibilityOf(prepaidAmount));
+//	totalAmountField.sendKeys("10");
+//}
+	
+	//public void clickSubmitButton() {
+//	public AddReservationPage clickYesConfirmation() {
+//
+//	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//
+//	    try {
+//	        // Wait for any overlay to disappear before interacting with the button
+//	        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".overlay.ng-star-inserted")));
+//
+//	        // Find the submit button
+//	        WebElement button = driver.findElement(By.xpath("//button[text()='Yes']"));
+//	        
+//	        // Scroll the button into view if needed
+//	        JavascriptExecutor js = (JavascriptExecutor) driver;
+//	        js.executeScript("arguments[0].scrollIntoView(true);", button);
+//
+//	        // Now click the button
+//	        button.click();
+//	        
+//	    } catch (TimeoutException e) {
+//	        System.out.println("Timeout waiting for overlay to disappear.");
+//	    } catch (ElementClickInterceptedException e) {
+//	        System.out.println("Element click intercepted, trying JS click.");
+//	        // Fallback to JS click
+//	        WebElement button = driver.findElement(By.xpath("//button[text()='Yes']"));
+//	        JavascriptExecutor js = (JavascriptExecutor) driver;
+//	        js.executeScript("arguments[0].click();", button);
+//	    }
+//	    return new AddReservationPage(driver);
+//	}
+//	public void selectLocationDropdown() {
+//    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+//
+//    // Wait for any modal overlay to disappear
+//    wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-backdrop")));
+//
+//    // Locate the dropdown input element
+//    By locationInputLocator = By.xpath("//ng-select[@bindlabel='name' and @formcontrolname='location']//input");
+//    WebElement locationInput = wait.until(ExpectedConditions.presenceOfElementLocated(locationInputLocator));
+//
+//    // Scroll into view
+//    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", locationInput);
+//
+//    // Wait for the input to be clickable
+//    wait.until(ExpectedConditions.elementToBeClickable(locationInput));
+//
+//    // Try clicking the input
+//    try {
+//        locationInput.click();
+//    } catch (ElementClickInterceptedException e) {
+//        // Fallback to JS click if intercepted
+//        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", locationInput);
+//    }
+//
+//    System.out.println("Clicked on location dropdown input.");
+//}
+	
+//	public void validateDueAmount(double expectedTotal, double expectedPrepaid) {
+//	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//	    
+//	    // Wait for dueAmount field to be visible
+//	    WebElement dueAmountField = wait.until(
+//	        ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='dueAmount']"))
+//	    );
+//
+//	    // Check if it's readonly
+//	    String isReadonly = dueAmountField.getAttribute("readonly");
+//	    if (isReadonly == null) {
+//	        throw new AssertionError("Due amount field is not readonly!");
+//	    }
+//
+//	    // Get the actual value in the field
+//	    String actualValueStr = dueAmountField.getAttribute("value");
+//	    double actualValue = Double.parseDouble(actualValueStr);
+//
+//	    // Calculate expected due amount
+//	    double expectedDue = expectedTotal - expectedPrepaid;
+//
+//	    // Compare expected and actual values (allowing for minor float differences)
+//	    if (Math.abs(actualValue - expectedDue) > 0.01) {
+//	        throw new AssertionError("Expected due amount: " + expectedDue + ", but found: " + actualValue);
+//	    }
+//
+//	    System.out.println("✅ Due amount validated successfully: " + actualValue);
+//	}
+
 }

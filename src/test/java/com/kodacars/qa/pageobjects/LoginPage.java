@@ -12,11 +12,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class LoginPage {
 	WebDriver driver;
 	WebDriverWait wait;
+	WebDriverWait longwait;
 	public LoginPage(WebDriver driver) {
 		if (driver == null) {
 			throw new IllegalArgumentException("Driver instance cannot be null");
 		}
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		this.longwait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
