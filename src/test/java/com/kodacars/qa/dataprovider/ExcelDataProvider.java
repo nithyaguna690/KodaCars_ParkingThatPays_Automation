@@ -53,6 +53,5 @@ public class ExcelDataProvider {
 		Object[][] data = CommonDataProvider.getAllRows(CHECKIN_KEYIN);
 		return data;
 	}
-	
-}
 
+}

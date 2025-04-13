@@ -7,25 +7,6 @@
 
 	<test name="Test">
 		<classes>
-<<<<<<< HEAD
-		
-		<!--	<class name="com.kodacars.qa.testscripts.LoginTest" /> 
-				<class name="com.kodacars.qa.testscripts.AddReservationKodaWalkinTest" />
-			<class name="com.kodacars.qa.testscripts.ThirdPartyReservationLinkTest" />
-			
-		
-			
-		-->
-		
-				
-			
-		<class name="com.kodacars.qa.testscripts.AddReservationKodaWalkinTest" /> 
-			
-			
-		
-		
-				
-=======
 
 			<!--	<class name="com.kodacars.qa.testscripts.LoginTest" /> 
 				    <class name="com.kodacars.qa.testscripts.AddReservationKodaWalkinTest" />
@@ -35,7 +16,6 @@
 			    	<class name="com.kodacars.qa.testscripts.LoginTest" />
 					<class name="com.kodacars.qa.testscripts.AddReservationKodaWalkinTest" />
 
->>>>>>> 4810937479d70958382df367e2fe832af7e0d0c1
 		</classes>
 
 	</test> <!--
