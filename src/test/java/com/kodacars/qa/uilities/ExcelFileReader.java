@@ -50,10 +50,10 @@ public class ExcelFileReader {
 	    case STRING:
 	        return cell.getStringCellValue();
 	    case NUMERIC:
-	        if (DateUtil.isCellDateFormatted(cell)) {
-	            Date date = cell.getDateCellValue();
-	            return new SimpleDateFormat("M/d").format(date); 
-	        } else {
+	    	if (DateUtil.isCellDateFormatted(cell)) {
+	    	    Date date = cell.getDateCellValue();
+	    	    return new SimpleDateFormat("MM/dd/yyyy").format(date); 
+	    	} else {
 	            double value = cell.getNumericCellValue();
 	            if (value == (long) value) {
 	                return String.valueOf((long) value); // Show as integer if there's no decimal part 78960.0
