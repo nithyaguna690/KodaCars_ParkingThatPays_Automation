@@ -718,10 +718,6 @@ public class AddReservationPage {
 		clickCollectPaymentButton();
 		return new AddReservationPage(driver);
 	}
-<<<<<<< HEAD
 
-	
-=======
->>>>>>> main
 }
 
