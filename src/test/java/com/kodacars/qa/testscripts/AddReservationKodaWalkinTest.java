@@ -74,7 +74,9 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		   dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider = "receivePaymentByCard")
 
 	 public void payPaymentByCard(Map<String, String> rowData) {
-
+		 
+		 System.out.println(rowData.get("Confirmation Number"));
+		 System.out.println("Checkbox***************************"+  rowData.get("Checkbox"));
 		AddReservationPage reservationObj = dashboardpage.clickLinkByConfirmationNumber(rowData.get("Confirmation Number"));
 		Assert.assertTrue(reservationObj.goToReceivePaymentCard(rowData.get("Card Information"))
 				                        .payPaymentByCard(rowData.get("Card Information"),
@@ -82,7 +84,10 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 				                        	              rowData.get("CVC"),
 				                        	              rowData.get("Billing Name"), 
 				                        	              rowData.get("Zip"), 
-				                        	              rowData.get("Email Id")).isoKPaymentReceviedButtonDisplayed());
+				                        	              rowData.get("Email Id"),
+				                        	              rowData.get("Checkbox"),
+				                        	              rowData.get("Phone Number"))				                        					
+				                        				.isoKPaymentReceviedButtonDisplayed());
 	}
 
 	@Test(priority=4, description="Verify the application that user can pay the payment by cash",

@@ -56,7 +56,7 @@ public class BaseClass {
 	@AfterMethod
 	public void close() {
 		 if (driver != null) {
-			 driver.quit();
+			 //driver.quit();
 		    }
 	}
 
