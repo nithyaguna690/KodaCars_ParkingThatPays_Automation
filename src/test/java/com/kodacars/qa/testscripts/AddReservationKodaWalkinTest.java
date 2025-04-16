@@ -31,7 +31,11 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		dashboardpage.clickAddReservation();
 		AddReservationPage reservationObj = dashboardpage.clickNoConfirmation();
 		Assert.assertTrue(reservationObj.AddReservation(rowData.get("Select Source"),
+<<<<<<< HEAD
 				                                                rowData.get("Start Date"),
+=======
+	                                                	rowData.get("Start Date"),
+>>>>>>> ranjani
 		                                                        rowData.get("End Date"),
 																rowData.get("Reservation Prepaid"),
 																rowData.get("Car Color"),
@@ -77,7 +81,11 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		   dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider = "receivePaymentByCard")
 
 	 public void payPaymentByCard(Map<String, String> rowData) {
+<<<<<<< HEAD
 
+=======
+		 
+>>>>>>> ranjani
 		AddReservationPage reservationObj = dashboardpage.clickLinkByConfirmationNumber(rowData.get("Confirmation Number"));
 		Assert.assertTrue(reservationObj.goToReceivePaymentCard(rowData.get("Card Information"))
 				                        .payPaymentByCard(rowData.get("Card Information"),
@@ -85,7 +93,14 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 				                        	              rowData.get("CVC"),
 				                        	              rowData.get("Billing Name"), 
 				                        	              rowData.get("Zip"), 
+<<<<<<< HEAD
 				                        	              rowData.get("Email Id")).isoKPaymentReceviedButtonDisplayed());
+=======
+				                        	              rowData.get("Email Id"),
+				                        	              rowData.get("Checkbox"),
+				                        	              rowData.get("Phone Number"))				                        					
+				                        				.isoKPaymentReceviedButtonDisplayed());
+>>>>>>> ranjani
 	}
 
 	@Test(priority=4, description="Verify the application that user can pay the payment by cash",
@@ -104,5 +119,10 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		reservationObj.updateReservationokBtnIsDisplayed(rowData.get("Click Button"));
 				
 	}
+<<<<<<< HEAD
 	}
 
+=======
+	
+}
+>>>>>>> ranjani

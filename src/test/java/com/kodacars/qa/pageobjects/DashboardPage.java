@@ -93,5 +93,5 @@ public class DashboardPage {
 		confirmCell.click();
 		return new AddReservationPage(driver);
 	}
-
+	
 }

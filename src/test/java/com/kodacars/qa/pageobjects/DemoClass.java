@@ -430,4 +430,12 @@ public class DemoClass {
 //	    System.out.println("✅ Due amount validated successfully: " + actualValue);
 //	}
 
+<<<<<<< HEAD
 }
+=======
+<<<<<<< HEAD
+}
+=======
+}
+>>>>>>> main
+>>>>>>> ranjani

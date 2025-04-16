@@ -4,11 +4,9 @@
 .classpath
 
 .settings/
+*.class
 
-.project
 /bin/
-
-/test-output/
 /allure-results/
 
 
