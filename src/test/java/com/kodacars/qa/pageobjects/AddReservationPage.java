@@ -2,12 +2,13 @@ package com.kodacars.qa.pageobjects;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,8 +24,21 @@ import com.kodacars.qa.uilities.CommonUtils;
 public class AddReservationPage {
 	Faker faker = new Faker();
 	WebDriverWait wait;
+	WebDriverWait longwait;
 	WebDriver driver;
+	private double totalAmount;
+	private double prepaidAmount;
 	CommonUtils utilsObj = CommonUtils.getInstance(driver);
+
+	public AddReservationPage(WebDriver driver) {
+		if (driver == null) {
+			throw new IllegalArgumentException("Driver instance cannot be null");
+		}
+		this.driver = driver;
+		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		this.longwait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		PageFactory.initElements(driver, this);
+	}
 
 	@FindBy(xpath = "//input[@formcontrolname='firstName']")
 	@CacheLookup
@@ -50,7 +64,7 @@ public class AddReservationPage {
 	@CacheLookup
 	private WebElement selectLocationdropdown;
 
-	@FindBy(xpath = "//ng-select[@formcontrolname='location' and @bindlabel='name']//span[contains(text(),'Barcelona')]")
+	@FindBy(xpath = "//ng-select[@formcontrolname='location' and @bindlabel='name']//span[contains(text(),'Madrid')]")
 	@CacheLookup
 	private WebElement selectLocation;
 
@@ -120,6 +134,10 @@ public class AddReservationPage {
 	@FindBy(xpath = "//ng-select[@formcontrolname='state']//input[@type='text']")
 	@CacheLookup
 	private WebElement Statedropdown;
+	
+	@FindBy(xpath = "//div/div/span[contains(@class, 'p-checkbox-icon')]")
+	@CacheLookup
+	private WebElement largeSizeVehicleCheckBOx;
 
 	@FindBy(xpath = "//button[text()='Create Reservation']")
 	@CacheLookup
@@ -145,10 +163,6 @@ public class AddReservationPage {
 	@CacheLookup
 	private WebElement selectThirdPartySource;
 
-	@FindBy(xpath = "//input[@formcontrolname='prepaidAmount']")
-	@CacheLookup
-	private WebElement prepaidAmount;
-
 	@FindBy(xpath = "//div[@class='modal-footer']//button[text()='Search']")
 	@CacheLookup
 	private WebElement searchBtn;
@@ -161,26 +175,34 @@ public class AddReservationPage {
 	@CacheLookup
 	private WebElement createManually;
 
-	// Reservation Link
 	@FindBy(xpath = "//div[@class='text-center mt-4']//button[text()='Receive Payment']")
-	@CacheLookup
-	private WebElement clickReceivePayment;
+	WebElement receivePaymentButton;
+
+	@FindBy(xpath = "//span[text()='Select Payment Mode']")
+	WebElement selectPaymentModeDDB;
+
+	@FindBy(xpath = "//p-dropdownitem[contains(@class,'p-element ng-tns-c53-18 ng-star-inserted')]//span[@class='ng-star-inserted' and text()='Card']")
+	WebElement cardOption;
+
+	@FindBy(xpath = "//p-dropdownitem[contains(@class,'p-element ng-tns-c53-18 ng-star-inserted')]//span[@class='ng-star-inserted' and text()='Cash']")
+	WebElement cashOption;
+
+	@FindBy(xpath = "(//button[text()='Pay Now'])[2]")
+	WebElement payNowBtn;
+
+	@FindBy(xpath = "//button[text()='OK']")
+	WebElement oKPaymentReceviedButton;
+
+	@FindBy(xpath = "//button[text()='Collect Payment']")
+	WebElement collectPaymentButton;
 
 	@FindBy(xpath = "//span[contains(@class, 'p-dropdown-label') and text()='Select Payment Mode']")
 	@CacheLookup
 	private WebElement selectPaymentMode;
 
-	@FindBy(xpath = "//li[@role='option']//span[text()='Cash']")
-	@CacheLookup
-	private WebElement selectCash;
-
 	@FindBy(xpath = "//button[@id='closeModal' and text()='Collect Payment']")
 	@CacheLookup
 	private WebElement collectPayment;
-
-	@FindBy(xpath = "//div[@class='swal2-actions']//button[contains(@class, 'swal2-confirm')]")
-	@CacheLookup
-	private WebElement paymentReceivedSuccessfully;
 
 	public void enterFirstName() {
 		String firstName = faker.name().firstName();
@@ -215,7 +237,7 @@ public class AddReservationPage {
 		utilsObj.visibilityOf(selectLocationdropdown);
 		selectLocationdropdown.click();
 	}
-
+	
 	public void selectLocation() throws InterruptedException {
 		Thread.sleep(3000);
 		utilsObj.visibilityOf(selectLocation);
@@ -239,76 +261,115 @@ public class AddReservationPage {
 	public void enterconfirmationNumber(String confirmationNum) {
 		confirmationNumber.sendKeys(confirmationNum);
 	}
-	
-		
-		public String getTextConfirmationNumber(String expectedConfirmationNumber) {
-		    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-		    // Wait until the input field is visible
-		    WebElement confirmationInput = wait.until(ExpectedConditions.presenceOfElementLocated(
-		        By.xpath("//input[@formcontrolname='confirmationNo']")));
-
-		    WebDriverWait waits = new WebDriverWait(driver, Duration.ofSeconds(60));
-		    WebElement confirmationElement = waits.until(ExpectedConditions.visibilityOfElementLocated(By.id("confirmationNumber")));
-
-		    new WebDriverWait(driver, Duration.ofSeconds(30)).until(
-		    	    webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
-		    	);
-
-		    // Get the confirmation number from the input field
-		    String actualConfirmationNumber = confirmationInput.getDomAttribute("value");
-		    		//getAttribute();
-return actualConfirmationNumber;
-		    // Assertion to compare expected vs actual confirmation number
-		   
-		}
-
-	
-
-	public void enterstartDate() {
-		enterstartDate.sendKeys("04/21/2025");
+	public void enterstartDate(String StartDate) {
+		enterstartDate.sendKeys(StartDate);
 	}
 
 	public void enterstartTime() {
 		enterstartTime.sendKeys("09:00 AM");
 	}
 
-	public void enterEndDate() {
-		enterEndDate.sendKeys("04/22/2025");
+	public void enterEndDate(String EndDate) {
+		enterEndDate.sendKeys(EndDate);
 	}
 
 	public void enterEndTime() {
-		enterEndTime.sendKeys("10:00 AM");
+		enterEndTime.sendKeys("06:30 PM");
 	}
-
-//	public void selectReservationPrepaidOrPartial2(String prepaid) {
-//		prepaidPartial.sendKeys(prepaid, Keys.ENTER);
-//	}
 
 	public void selectReservationPrepaid(String prepaid) {
 		prepaidPartial.sendKeys(prepaid, Keys.ENTER);
 	}
 
-	public void enterTotalAmount() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-		WebElement totalAmountInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@formcontrolname='totalAmount']")));
-		totalAmountInput.sendKeys("20");
+	@FindBy(xpath = "//input[@formcontrolname='totalAmount']")
+	private WebElement totalAmountInput;
+
+	@FindBy(xpath = "//input[@formcontrolname='prepaidAmount']")
+	private WebElement prepaidAmountInput;
+
+	@FindBy(xpath = "//input[@formcontrolname='dueAmount']")
+	private WebElement dueAmountInput;
+
+	public void enterTotalAmount(double amount) {
+		this.totalAmount = amount;
+		wait.until(ExpectedConditions.visibilityOf(totalAmountInput)).clear();
+		totalAmountInput.sendKeys(String.valueOf(amount));
 	}
 
-	public void enterPrepaidAmount() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		WebElement totalAmountField = wait.until(ExpectedConditions.visibilityOf(prepaidAmount));
-		totalAmountField.sendKeys("8");
+	public void enterPrepaidAmount(double amount) {
+		this.prepaidAmount = amount;
+		wait.until(ExpectedConditions.visibilityOf(prepaidAmountInput)).clear();
+		prepaidAmountInput.sendKeys(String.valueOf(amount));
+	}
+
+	public void validateDueAmount() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		boolean isPageLoaded = js.executeScript("return document.readyState").equals("complete");
+
+		System.out.println("Page load complete: " + isPageLoaded);
+
+		if (!isPageLoaded) {
+			throw new AssertionError("❌ Page not fully loaded, cannot validate due amount.");
+		}
+
+		// Check if the modal is present and close it if necessary
+		try {
+			// Wait for the modal backdrop to be visible, if it's there
+			WebElement modal = wait
+					.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".modal-backdrop.fade.show")));
+
+			if (modal.isDisplayed()) {
+				// Handle closing the modal or wait for it to disappear
+				WebElement closeButton = driver.findElement(By.cssSelector(".modal .close"));
+				closeButton.click(); // Close the modal
+				// Optionally wait for modal to disappear
+				wait.until(ExpectedConditions.invisibilityOf(modal));
+			}
+		} catch (NoSuchElementException | TimeoutException e) {
+			// Modal not found or not visible, continue with the test
+			System.out.println("Modal not found or not visible, continuing with the test.");
+		}
+
+		WebElement dueField = wait
+				.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[formcontrolname='dueAmount']")));
+		wait.until(ExpectedConditions.attributeToBeNotEmpty(dueField, "value"));
+
+		// Ensure the field's value is not empty or null
+		String dueAmountValue = dueField.getDomProperty("value");
+		System.out.println("Due amount value: " + dueAmountValue);
+
+		if (dueAmountValue == null || dueAmountValue.trim().isEmpty()) {
+			throw new AssertionError("Due amount field value is empty or null.");
+		}
+
+		double actualDue = 0.0;
+		try {
+			actualDue = Double.parseDouble(dueAmountValue);
+		} catch (NumberFormatException e) {
+			throw new AssertionError(" Due amount value is not a valid number.");
+		}
+
+		System.out.println("Total Amount: " + totalAmount);
+		System.out.println("Prepaid Amount: " + prepaidAmount);
+
+		double expectedDue = totalAmount - prepaidAmount;
+		if (Math.round(actualDue * 100) != Math.round(expectedDue * 100)) {
+			throw new AssertionError(" Due amount mismatch. Expected: " + expectedDue + ", but was: " + actualDue);
+		}
+
+		System.out.println(" Due amount is correct: " + actualDue);
+		js.executeScript("arguments[0].scrollIntoView(true);", dueField);
+		js.executeScript("arguments[0].click();", dueField);
 	}
 
 	public void clicksearchBtn() {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(searchBtn));
 		searchButton.click();
 	}
 
 	public void enterConfirmationNumber(String ConfirmationNum) {
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement confirmationField = wait.until(ExpectedConditions.visibilityOf(enterConfirmationNumber));
 		confirmationField.sendKeys(ConfirmationNum);
 	}
@@ -385,6 +446,10 @@ return actualConfirmationNumber;
 	public void selectState(String state) {
 		Statedropdown.sendKeys(state, Keys.ENTER);
 	}
+	
+	public void largeSizeVehicleCheckBOx() {
+		largeSizeVehicleCheckBOx.click();
+	}
 
 	public void clickCreateReservation() {
 		createReservationBtn.click();
@@ -395,7 +460,10 @@ return actualConfirmationNumber;
 	}
 
 	public boolean isReservationSuccessBtnDisplayed() {
-		return reservationSuccessBtn.isDisplayed();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(
+				By.xpath("//div[@class='modal-content']/div[@class='p-3 m-auto']/div/button[text()='Ok']")));
+		return element.isDisplayed();
 	}
 
 	public void clickThirdPartySource() {
@@ -408,37 +476,33 @@ return actualConfirmationNumber;
 		createManually.click();
 	}
 
-	public void clickReceivePayment() {
+	public void clickActionButtonBtnDisplayed(String buttonText) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 
-		// Ensure the page has fully loaded
 		wait.until(webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState")
 				.equals("complete"));
 
 		try {
-			// Ensure the element is present
-			WebElement receivePaymentButton = wait.until(ExpectedConditions
-					.presenceOfElementLocated(By.xpath("//button[contains(text(),'Receive Payment')]")));
+			WebElement actionButton = wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("//button[contains(text(),'" + buttonText + "')]")));
 
-			// Scroll into view
-			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", receivePaymentButton);
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", actionButton);
+			wait.until(ExpectedConditions.elementToBeClickable(actionButton));
 
-			// Wait for the button to be clickable
-			wait.until(ExpectedConditions.elementToBeClickable(receivePaymentButton));
-
-			// Click the button, use JS click if necessary
 			try {
-				receivePaymentButton.click();
+				actionButton.click();
 			} catch (ElementClickInterceptedException e) {
-				((JavascriptExecutor) driver).executeScript("arguments[0].click();", receivePaymentButton);
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", actionButton);
 			}
 
+			System.out.println("Clicked button: " + buttonText);
+
 		} catch (TimeoutException e) {
-			System.out.println("Timeout: 'Receive Payment' button not found.");
+			System.out.println("Button not found: " + buttonText);
 		}
 	}
 
-	public boolean isReceivePaymentMethod() {
+	public boolean isReceivePaymentMethodDispalyed() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 
 		// Ensure the page has fully loaded
@@ -460,112 +524,200 @@ return actualConfirmationNumber;
 	}
 
 	public void selectPaymentMode() {
-		utilsObj.visibilityOfExtraWaitTime(selectPaymentMode);
-		selectPaymentMode.click();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("overlay")));
+
+		WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(
+				By.xpath("//span[contains(@class, 'p-dropdown-label') and text()='Select Payment Mode']")));
+		dropdown.click();
 	}
-
-	public void selectCash() {
-		utilsObj.visibilityOf(selectCash);
-		selectCash.click();
-	}
-
-	public void clickcollectPayment() {
-		utilsObj.visibilityOfExtraWaitTime(collectPayment);
-		collectPayment.click();
-	}
-
-	public void clickpaymentReceivedSuccessfully() {
-		utilsObj.visibilityOfExtraWaitTime(paymentReceivedSuccessfully);
-		paymentReceivedSuccessfully.click();
-	}
-
-	public boolean KodaWalkAddReservation(String sourceName, String prepaidPartial, String carColor, String carMake,
-			String carModel, String license, String state) throws InterruptedException {
-
-		// Customer Details
+	
+	public void customerDetails() {
 		enterPhoneNumber();
 		enterEmail();
 		enterFirstName();
 		enterLastName();
-
-		// Reservation Details
+	}
+	
+	public void addVehicleDetails(String carColor, String carMake, String carModel, String license, String state)
+			throws InterruptedException {
+		// Add Vehicle Details
+		clickAddVehicle();
+		carColordropdown();
+		selectCarcolor(carColor);
+		clickCarMakeDropdown();
+		selectCarMake(carMake);
+		selectCarModel(carModel);
+		selectLicenceno(license);
+		selectState(state);
+	}
+	
+	public void reservationDetails(String sourceName,String StartDate, String EndDate) throws InterruptedException {
 		selectLocationdropdown();
 		selectLocation();
 		selectSource(sourceName);
-		enterstartDate();
+		enterstartDate(StartDate);
 		enterstartTime();
-		enterEndDate();
+		enterEndDate(EndDate);
 		enterEndTime();
+	}
+
+	// Test Koda And WalkIn Method
+	public boolean AddReservation(String sourceName, String StartDate, String EndDate, String prepaidPartial, String carColor, String carMake,
+			                      String carModel, String license, String state) throws InterruptedException {
+		customerDetails();  //Enter the Customer Details 
+		reservationDetails(sourceName,StartDate, EndDate);  //Enter the Reservation Details
 		if (sourceName.equalsIgnoreCase("koda")) {
 			selectReservationPrepaid(prepaidPartial);
 		}
-		//selectReservationPrepaid(prepaidPartial);
-//		enterTotalAmount();
-//		enterPrepaidAmount();
-
-		// Add Vehicle Details
-		clickAddVehicle();
-		carColordropdown();
-		selectCarcolor(carColor);
-		clickCarMakeDropdown();
-		selectCarMake(carMake);
-		selectCarModel(carModel);
-		selectLicenceno(license);
-		selectState(state);
+		addVehicleDetails(carColor, carMake, carModel, license, state);  //Enter the Add Vehicle Details
 		clickCreateReservation();
 		boolean isOkBtnDispalyed = isReservationSuccessBtnDisplayed();
 		clickReservationSuccessBtn();
 		return isOkBtnDispalyed;
-
 	}
 
-	public boolean KodaWalkAddReservation(String sourceName, String confirmationNumber, String PrepaidPartial,
-			String carColor, String carMake, String carModel, String license, String state)
-			throws InterruptedException {
-
+	// Third Party Reservation Details
+	public boolean AddReservation(String sourceName, String confirmationNumber, String StartDate, String EndDate, String PrepaidPartial, String carColor,
+			                      String carMake, String carModel, String license, String state) throws InterruptedException {
 		enterconfirmationNumber(confirmationNumber);
-
-		clickcreateManually();
-		// Customer Details
-		enterPhoneNumber();
-		enterEmail();
-		enterFirstName();
-		enterLastName();
-
-		// Reservation Details
-		selectLocationdropdown();
-		selectLocation();
-		selectSource(sourceName);
-		enterstartDate();
-		enterstartTime();
-		enterEndDate();
-		enterEndTime();
+		clickcreateManually(); 
+		customerDetails();  //Enter the Customer Details 
+		reservationDetails(sourceName,StartDate, EndDate);  //Enter the Reservation Details
 		selectReservationPrepaid(PrepaidPartial);
-		enterTotalAmount();
-		enterPrepaidAmount();
-
-		// Add Vehicle Details
-		clickAddVehicle();
-		carColordropdown();
-		selectCarcolor(carColor);
-		clickCarMakeDropdown();
-		selectCarMake(carMake);
-		selectCarModel(carModel);
-		selectLicenceno(license);
-		selectState(state);
+		enterTotalAmount(30); 
+		enterPrepaidAmount(15);
+		validateDueAmount();
+		addVehicleDetails(carColor, carMake, carModel, license, state);  //Enter the Add Vehicle Details
+		//largeSizeVehicleCheckBOx();
 		clickCreateReservation();
 		boolean isOkBtnDispalyed = isReservationSuccessBtnDisplayed();
+		System.out.println("Condition being tested: " + isOkBtnDispalyed); 
 		clickReservationSuccessBtn();
+		return isOkBtnDispalyed;
+	}
+
+	public void clickOkButton() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement okButton = wait
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class,'swal2-confirm')]")));
+		okButton.click();
+	}
+
+	public boolean updateReservationokBtnIsDisplayed(String updateReservation) {
+		clickActionButtonBtnDisplayed(updateReservation);
+		boolean isOkBtnDispalyed = okBtnisDisplayedupdate();
+		okBtnUpdateReservation();
 		return isOkBtnDispalyed;
 
 	}
 
-	public AddReservationPage(WebDriver driver) {
-		if (driver == null) {
-			throw new IllegalArgumentException("Driver instance cannot be null");
-		}
-		this.driver = driver;
-		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		PageFactory.initElements(driver, this);
+	public void okBtnUpdateReservation() {
+		WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Ok']")));
+		okButton.click();
 	}
+
+	public boolean okBtnisDisplayedupdate() {
+		WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Ok']")));
+		return okButton.isDisplayed();
+	}
+
+	public void clickButtonByText(String buttonText) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+		wait.until(ExpectedConditions
+				.presenceOfAllElementsLocatedBy(By.xpath("//button[contains(text(), '" + buttonText + "')]")));
+
+		List<WebElement> buttons = driver.findElements(By.xpath("//button[contains(text(), '" + buttonText + "')]"));
+
+		for (WebElement button : buttons) {
+			try {
+				if (button.isDisplayed() && button.isEnabled()) {
+					try {
+						button.click();
+					} catch (Exception e) {
+						// Fallback to JS click
+						((JavascriptExecutor) driver).executeScript("arguments[0].click();", button);
+					}
+					System.out.println("Clicked button with text: " + buttonText);
+					return;
+				}
+			} catch (StaleElementReferenceException e) {
+				// Try the next one
+				continue;
+			}
+		}
+
+		throw new RuntimeException("No visible and enabled button found with text: " + buttonText);
+	}
+
+	public void clickReceivePayment() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+
+		// Ensure the page has fully loaded
+		wait.until(webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState")
+				.equals("complete"));
+
+		try {
+			WebElement receivePaymentButton = wait.until(ExpectedConditions
+					.presenceOfElementLocated(By.xpath("//button[contains(text(),'Receive Payment')]")));
+
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", receivePaymentButton);
+			wait.until(ExpectedConditions.elementToBeClickable(receivePaymentButton));
+			try {
+				receivePaymentButton.click();
+			} catch (ElementClickInterceptedException e) {
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", receivePaymentButton);
+			}
+
+		} catch (TimeoutException e) {
+			System.out.println("Timeout: 'Receive Payment' button not found.");
+		}
+	}
+
+	public void selectPaymentCard() {
+		selectPaymentMode.click();
+		cardOption.click();
+	}
+
+	public void selectPaymentCash() {
+		selectPaymentMode.click();
+		cashOption.click();
+	}
+
+	public void enterCardReferenceNumber(String cardRefNumber) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement cardRefInput = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@formcontrolname='CRN']")));
+		cardRefInput.clear();
+		cardRefInput.sendKeys(cardRefNumber);
+	}
+
+	public boolean isoKPaymentReceviedButtonDisplayed() {
+		boolean status = wait.until(ExpectedConditions.visibilityOf(oKPaymentReceviedButton)).isDisplayed();
+		oKPaymentReceviedButton.click();
+		return status;
+	}
+
+	public PaymentPage goToReceivePaymentCard(String cardInformation) {
+		clickReceivePayment();
+		String currentWindowHandle = driver.getWindowHandle();
+		selectPaymentCard();
+		enterCardReferenceNumber(cardInformation);
+		payNowBtn.click();
+		return new PaymentPage(driver, currentWindowHandle);
+	}
+
+	public void clickCollectPaymentButton() {
+		collectPayment.click();
+	}
+
+	public AddReservationPage goToReceivePaymentCash() {
+		clickReceivePayment();
+		selectPaymentCash();
+		clickCollectPaymentButton();
+		return new AddReservationPage(driver);
+	}
+
 }
+
