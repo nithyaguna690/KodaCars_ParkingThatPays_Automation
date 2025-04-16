@@ -25,7 +25,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 	}
 
 	// Walk-in Customer and Koda
-	//@Test(priority = 0,dataProvider = "KodaWalkIn", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
+	@Test(priority = 0,dataProvider = "KodaWalkIn", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 
 	public void AddReservationForWalkInKoda(Map<String, String> rowData) throws InterruptedException {
 
@@ -41,7 +41,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 
 	}
 
-	//@Test(priority = 1, dataProvider = "ThirdpartyManuallyCreateConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
+	@Test(priority = 1, dataProvider = "ThirdpartyManuallyCreateConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 
 	public void AddReservationForThirdPartyCreateManually(Map<String, String> rowData) throws InterruptedException {
 
@@ -59,7 +59,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 
 	
 	// Search the third party confirmation Number
-	//@Test(priority = 2, dataProvider = "ThirdpartyManuallyCreateConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
+	@Test(priority = 2, dataProvider = "ThirdpartyManuallyCreateConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 	
 	public void AddReservationConfirmationNumberSearch(Map<String, String> rowData) throws InterruptedException {
 		
@@ -71,8 +71,8 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		Assert.assertTrue(reservationObj.isReceivePaymentMethodDispalyed());
 	}
 	
-	// @Test(priority = 3, description = "Verify the application that user can pay the payment by cards", 
-		//	dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider = "receivePaymentByCard")
+	@Test(priority = 3, description = "Verify the application that user can pay the payment by cards", 
+		dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider = "receivePaymentByCard")
 
 	public void payPaymentByCard(Map<String, String> rowData) {
 
@@ -84,8 +84,8 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 				.isoKPaymentReceviedButtonDisplayed());
 	}
 
-	//@Test(priority=4, description="Verify the application that user can pay the payment by cash",
-		//	dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider = "receivePaymentByCash")
+	@Test(priority=4, description="Verify the application that user can pay the payment by cash",
+			dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider = "receivePaymentByCash")
 	public void payPaymentByCash(Map<String, String> rowData) {
 
 		AddReservationPage reservationObj = dashboardpage.clickLinkByConfirmationNumber(rowData.get("Confirmation Number"));
@@ -96,7 +96,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 	
 	
 	// Update Reservation
-	//@Test(priority = 5, dataProvider = "updateReservation", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
+   @Test(priority = 5, dataProvider = "updateReservation", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 	
 	public void updateReservation(Map<String, String> rowData) throws InterruptedException {
 		
@@ -106,36 +106,41 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 				
 	}
 	
-	//@Test(priority = 6, dataProvider = "CheckIn/KeyIn", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
+	@Test(priority = 6, dataProvider = "CheckIn/KeyIn", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 	public void checkInKeyIn(Map<String, String> rowData) throws InterruptedException
 	{
 		AddReservationPage reservationObj =dashboardpage.clickLinkByConfirmationNumber(rowData.get("confirmation Number"));
 		reservationObj.checkInKeyIn("Check In / Key In");
 	}
 	
-     // checkin with payment.
-	@Test(priority = 7,dataProviderClass= com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider ="CheckIn/KeyIn" )
+     // checkin with card payment.
+	@Test(priority = 7,description="Verify Checkin with credit card payment",
+			dataProviderClass= com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider ="receivePaymentByCard" )
     public void Check_In(Map<String, String> rowData) throws InterruptedException {
          dashboardpage.clickAddReservation();
-		
-		AddReservationPage reservationObj = dashboardpage.clickYesConfirmation();
-		reservationObj.enterconfirmationNumber("CHAP456347");
-		//( rowData.get("confirmation Number"));
-		reservationObj.clicksearchBtn();
-		reservationObj.checkin();
-		
-		//reservationObj.checkin(rowData.get("Card Information"), rowData.get("Card Expiry"), rowData.get("CVC"),
-					//	rowData.get("Billing Name"), rowData.get("Zip"), rowData.get("Email Id"));
-	
-		
+
+         AddReservationPage reservationObj = dashboardpage.clickYesConfirmation();
+ 		reservationObj.enterconfirmationNumber("BRHM1166220");
+ 		//( rowData.get("Confirmation Number"));
+ 		reservationObj.clicksearchBtn();
+ 		reservationObj.Checkin_CardPayment(rowData.get("Card Information"))
+ 		                                .CheckinPaymentByCard(rowData.get("Card Information"),
+ 		            		                                  rowData.get("Card Expiry"),
+ 		            		                                  rowData.get("CVC"),
+ 		                                                      rowData.get("Billing Name"), 
+ 		                                                      rowData.get("Zip"),
+ 		                                                      rowData.get("Email Id"));
+ 		                                        
+ 	
+			
 	}
-	@Test(priority = 8,dataProviderClass= com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider ="CheckIn/KeyIn" )
+	@Test(priority = 8, description="Verify Check out test",
+			dataProviderClass= com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider ="receivePaymentByCard" )
     public void Check_Out(Map<String, String> rowData) throws InterruptedException {
-         dashboardpage.clickAddReservation();
-		
+         
+		dashboardpage.clickAddReservation();
 		AddReservationPage reservationObj = dashboardpage.clickYesConfirmation();
-		reservationObj.enterconfirmationNumber("CHAP456347");
-		//( rowData.get("confirmation Number"));
+		reservationObj.enterconfirmationNumber( rowData.get("Confirmation Number"));
 		reservationObj.clicksearchBtn();
 		reservationObj.checkout();
 	

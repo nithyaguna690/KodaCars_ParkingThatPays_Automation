@@ -17,6 +17,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import com.github.javafaker.Faker;
 import com.kodacars.qa.uilities.CommonUtils;
@@ -24,7 +25,7 @@ import com.kodacars.qa.uilities.CommonUtils;
 public class AddReservationPage {
 	Faker faker = new Faker();
 	WebDriverWait wait;
-	WebDriver driver;
+	static WebDriver driver;
 	CommonUtils utilsObj = CommonUtils.getInstance(driver);
 
 	public AddReservationPage(WebDriver driver) {
@@ -60,7 +61,7 @@ public class AddReservationPage {
 	@CacheLookup
 	private WebElement selectLocationdropdown;
 
-	@FindBy(xpath = "//ng-select[@formcontrolname='location' and @bindlabel='name']//span[contains(text(),'Barcelona')]")
+	@FindBy(xpath = "//ng-select[@formcontrolname='location' and @bindlabel='name']//span[contains(text(),'Madrid')]")
 	@CacheLookup
 	private WebElement selectLocation;
 
@@ -208,94 +209,33 @@ public class AddReservationPage {
 	@CacheLookup
 	private WebElement collectPayment;
 	
-	@FindBy(xpath = "//*[text()='Check-In/ Key-In']")
-	@CacheLookup
-	WebElement checkin;
-	
 	@FindBy(xpath ="//button[normalize-space()='Check In / Key In']")
 	@CacheLookup
 	WebElement check_in;
 	
-	@FindBy(xpath = "//div[@class='modal-footer ng-star-inserted'][2]/button[text()='Pay Now']")
-    @CacheLookup
-    WebElement Pay_Now;
-	
-   @FindBy(xpath= "//input[@id='email']")
+   @FindBy(xpath = "//button[text()='Edit Location']")
    @CacheLookup
-   WebElement Email;
-   
-   @FindBy(xpath= "//div[@class='flex-container']")
+   WebElement EditLocation;
+
+   @FindBy(xpath = "//button[text()='Check Out / Key Out']")
    @CacheLookup
-   WebElement Card_radiobtn;
-   
-  
-  @FindBy(id = "cardNumber")
-  @CacheLookup
-  WebElement Card_num;
-
-@FindBy(css = "#cardExpiry")
-@CacheLookup
-WebElement Card_expirydate;
-
-@FindBy(id = "cardCvc")
-@CacheLookup
-WebElement Card_CVC;
-
-@FindBy(id = "billingName")
-@CacheLookup
-WebElement CardHolder_Name;
-
-@FindBy(id = "billingPostalCode")
-@CacheLookup
-WebElement CardHolder_zipcode;
-
-@FindBy(id = "//*[@class='SignUpForm SignUpForm--expanded']//div[@class='Checkbox'")
-@CacheLookup
-WebElement unchecksave;
-
-@FindBy(xpath="//input[@value='CheckedIn']")
-@CacheLookup
-WebElement status;
-
-@FindBy(xpath = "//div[@class= 'ConfirmPayment']")
-@CacheLookup
-WebElement pay;
-
-@FindBy(xpath = "//*[@class='swal2-header']")
-@CacheLookup
-WebElement popup;
-
-@FindBy(xpath = "//button[text()='OK']")
-@CacheLookup
-WebElement OK;
-
-@FindBy(xpath = "//button[text()='Ok']")
-@CacheLookup
-WebElement ok;
-
-@FindBy(xpath = "//*[@id='checkOut']//button[text()='Pay Now']")
-@CacheLookup
-private WebElement PayNow;
-
-@FindBy(xpath = "//button[text()='Check Out / Key Out']")
-@CacheLookup
-private WebElement Checkout;
+   private WebElement Checkout;
 	
-@FindBy(xpath = "//button[@id='closeModal'and contains(text(),'Check-Out/ Key-Out')]")
-@CacheLookup
-private WebElement Checkout_click;
+   @FindBy(xpath = "//button[@id='closeModal'and contains(text(),'Check-Out/ Key-Out')]")
+   @CacheLookup
+   private WebElement Checkout_click;
 	
-@FindBy(xpath = "//div[@class='swal2-header']")
-@CacheLookup
-private WebElement ConfirmPayment;
+   @FindBy(xpath = "//div[@class='swal2-header']")
+   @CacheLookup
+   private WebElement ConfirmPayment;
 	
-@FindBy(xpath = "//button[text()='Yes, go ahead.']")
-@CacheLookup
-private WebElement yes;
+   @FindBy(xpath = "//button[text()='Yes, go ahead.']")
+   @CacheLookup
+   private WebElement yes;
 	
-@FindBy(xpath = "//button[text()='Ok']")
-@CacheLookup
-private WebElement checkout_ok;
+   @FindBy(xpath = "//button[text()='Ok']")
+   @CacheLookup
+   private WebElement checkout_ok;
 	 
 	
 	public void enterFirstName() {
@@ -384,15 +324,15 @@ private WebElement checkout_ok;
 	}
 
 	public void enterstartDate() {
-		enterstartDate.sendKeys("04/08/2025");
+		enterstartDate.sendKeys("04/14/2025");
 	}
 
 	public void enterstartTime() {
-		enterstartTime.sendKeys("09:00 AM");
+		enterstartTime.sendKeys("1:00 PM");
 	}
 
 	public void enterEndDate() {
-		enterEndDate.sendKeys("04/09/2025");
+		enterEndDate.sendKeys("04/14/2025");
 	}
 
 	public void enterEndTime() {
@@ -426,11 +366,6 @@ private WebElement checkout_ok;
 		searchButton.click();
 	}
 	
-	public void unchecksavecarddetails() {
-		utilsObj.visibilityOfExtraWaitTime(unchecksave);
-		unchecksave.click();
-	}
-
 	public void enterConfirmationNumber(String ConfirmationNum) {
 		// WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement confirmationField = wait.until(ExpectedConditions.visibilityOf(enterConfirmationNumber));
@@ -697,6 +632,22 @@ private WebElement checkout_ok;
 		WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Ok']")));
 		return okButton.isDisplayed();
 	}
+	
+    public static boolean checkinstatus() {
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			WebElement status = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Edit Location']")));
+			Assert.assertTrue(status.isDisplayed());
+			return status.isDisplayed();
+			
+		}
+	
+	
+	public boolean checkoutstatus() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		WebElement status1 = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@value='CheckedOut']")));
+		return status1.isDisplayed();
+		
+	}
 
 	// **************CheckIn / Key In
 	public void checkInKeyIn(String checkInButton) {
@@ -758,6 +709,22 @@ private WebElement checkout_ok;
 		}
 	}
 
+//	public void clickcheckin() {
+//		new WebDriverWait(driver, Duration.ofSeconds(50));
+//		wait.until(webDriver -> ((JavascriptExecutor) webDriver).executeScript("return document.readyState")
+//				.equals("complete"));
+//			try {
+//				
+//			((JavascriptExecutor) driver).executeScript("window.scrollBy(0,750)");	
+//			WebElement checkin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Check-In/ Key-In']")));
+//			checkin.click();
+//			}
+//					 catch (TimeoutException e) {
+//						    System.out.println("Timeout: 'Check-In/ Key-In' button not found within 8 seconds.");
+//						} catch (Exception e) {
+//						    System.out.println("Unexpected error while clicking 'Check-In/ Key-In': " + e.getMessage());
+//						}
+//	}
 	public void selectPaymentCard() {
 		selectPaymentMode.click();
 		cardOption.click();
@@ -786,83 +753,46 @@ private WebElement checkout_ok;
 
 		clickReceivePayment();
 		String currentWindowHandle = driver.getWindowHandle();
+		System.out.println("***********************************" +currentWindowHandle);
 		selectPaymentCard();
 		enterCardReferenceNumber(cardInformation);
 		payNowBtn.click();
 		return new PaymentPage(driver, currentWindowHandle);
 	}
 	
-	//public void checkin(String cardnumber,String cardExpiry ,String cvv, String customerName, String zipcode, String customeremail) throws InterruptedException {
-		 public void checkin() throws InterruptedException {
-	     Thread.sleep(8000);
-		   check_in.click();
-		   Thread.sleep(6000);
-	 	   WebElement parkingslotwindow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='assignParkingSlot']//div[contains(text(),'Reservation No: ')]")));
-	 	   parkingslotwindow.click();
-	 	  Thread.sleep(6000);
-	 	    ReceivePayment.click();
-	 	   selectPaymentMode.click();
-	 	   cardOption.click();
-	 	   String mainWindowHandle = driver.getWindowHandle();   
-	 	   Pay_Now.click();
-	 	  Thread.sleep(6000);
-	 	  Set<String> allWindowHandles = driver.getWindowHandles();
-		  for (String handle : allWindowHandles) {
-			    if (!handle.equals(mainWindowHandle)) {
-			        driver.switchTo().window(handle); // Switch to child window
-			        Thread.sleep(6000);
-			        Email.click();
-			        Email.sendKeys("customeremail@example.com");
-			        Thread.sleep(2500);
-			        Card_radiobtn.click();
-			        Card_num.click();
-			        Card_num.sendKeys("4242424242424242");
-			        Card_expirydate.sendKeys("08/27");
-			        Card_CVC.click();
-			        Card_CVC.sendKeys("111");
-			        CardHolder_Name.sendKeys("customerName");
-			        CardHolder_zipcode.sendKeys("67816");
-			        ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,650)");
-					 Thread.sleep(10000);
-					WebElement unSave= driver.findElement(By.xpath("//*[@class='SignUpForm SignUpForm--expanded']//div[@class='Checkbox']"));
-					wait.until(ExpectedConditions.elementToBeClickable(unSave));
-					unSave.click();
-					// driver.findElement(By.id("enableStripePass")).click();
-					pay.click();
-			     	Thread.sleep(6000);
-			         driver.close(); 
-		        	driver.switchTo().window(mainWindowHandle);
-			         	    }
-			    }
-		  
-		  Thread.sleep(5000);
-		  popup.click();
-		  OK.click();
-		  Thread.sleep(6000);
-		  checkin.click();
-		  Thread.sleep(1000);
-		  ok.click();
-		  Thread.sleep(1500);
-		  status.click();
-		  
-		}
+	public PaymentPage Checkin_CardPayment(String cardInformation){
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+		((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight)");
+		WebElement checkin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Check In / Key In']")));
+		checkin.click();
+		String currentWindowHandle = driver.getWindowHandle();
+		System.out.println("%%%%%%%currentWindowHandle%%%%%%%" + currentWindowHandle);
+		WebElement parkingslotwindow = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='assignParkingSlot']//div[contains(text(),'Reservation No: ')]")));
+   	    parkingslotwindow.click();
+   	    ReceivePayment.click();
+   	    selectPaymentCard();
+   	    payNowBtn.click();
+   	    return new PaymentPage(driver, currentWindowHandle);
+	}
+	
+
 	public void clickCollectPaymentButton() {
 		collectPayment.click();
 	}
 	
 	public void checkout() throws InterruptedException{
-		
-		  Thread.sleep(6000);
-		  Checkout.click();
- 		  Thread.sleep(8000);
- 		 ((JavascriptExecutor) driver).executeScript("window.scrollBy(0,650)");
- 		  Checkout_click.click();
- 		  Thread.sleep(6000);		        		 
- 		  ConfirmPayment.click();
- 		  yes.click();
- 		  Thread.sleep(8000);
- 		  checkout_ok.click();
- 		  System.out.println("Check out completed");
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+		wait.until(ExpectedConditions.elementToBeClickable(Checkout)).click();
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,650)");
+		wait.until(ExpectedConditions.elementToBeClickable(Checkout_click)).click();
+		wait.until(ExpectedConditions.elementToBeClickable(ConfirmPayment)).click();
+		wait.until(ExpectedConditions.elementToBeClickable(yes)).click();
+		wait.until(ExpectedConditions.elementToBeClickable(checkout_ok)).click();
+		System.out.println("Check out completed");
+		checkinstatus();
+	
 }
 
 	

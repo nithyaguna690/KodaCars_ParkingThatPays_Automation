@@ -11,7 +11,6 @@ public class ExcelDataProvider {
 	private static final String CASH_PAYMENT = "CashPayment";
 	private static final String UPDATE_RESERVATION = "UpdateReservation";
 	private static final String CHECKIN_KEYIN = "CheckInKeyIn";
-	//private static final String Check_InConfNum_SHEET ="CheckInKeyIn";
 
 	@DataProvider(name = "KodaWalkIn")
 	public static Object[][] kodaWalkInDataProvider() {
@@ -54,9 +53,5 @@ public class ExcelDataProvider {
 		Object[][] data = CommonDataProvider.getAllRows(CHECKIN_KEYIN);
 		return data;
 	}
-	@DataProvider(name = "Check_InConfNum")
-	public static Object[][] Check_InDatProvider(){
-		Object[][] data = CommonDataProvider.getAllRows(CHECKIN_KEYIN);
-		return data;
-      }
+
 }
