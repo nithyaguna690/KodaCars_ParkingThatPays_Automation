@@ -197,6 +197,10 @@ public class PaymentPage {
 				Phonenumber.click();
 				Phonenumber.sendKeys("2487676786");
 	    		actions.moveToElement(emailTxt).click().sendKeys(email).build().perform();
+				WebElement Link = driver.findElement(By.xpath("//a[@aria-label='Link]"));
+	        	Link.click();
+	        	driver.findElement(By.xpath("//button[@class='LinkActionButton LinkActionButton--icon ']")).click();
+	        	Thread.sleep(6000);
 
 				JavascriptExecutor js = (JavascriptExecutor) driver;				
 				js.executeScript("arguments[0].click();", payButton);
