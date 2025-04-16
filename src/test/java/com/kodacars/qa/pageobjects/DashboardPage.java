@@ -87,14 +87,11 @@ public class DashboardPage {
 	}
 
 	public AddReservationPage clickLinkByConfirmationNumber(String confirmationNumber) {
-		
-		//Added by Ranjani 90://div[@col-id='reservationCode']//span[contains(@class,'ag-cell-value') and text()='
-		
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		WebElement confirmCell = wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("//div[@col-id='reservationCode']//span[contains(@class,'ag-cell-value') and text()='" + confirmationNumber + "']")));
+				By.xpath("//span[contains(@class,'ag-cell-value') and text()='" + confirmationNumber + "']")));
 		confirmCell.click();
 		return new AddReservationPage(driver);
 	}
-
+	
 }

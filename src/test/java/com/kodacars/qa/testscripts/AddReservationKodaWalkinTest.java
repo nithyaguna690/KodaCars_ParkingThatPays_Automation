@@ -31,13 +31,14 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		dashboardpage.clickAddReservation();
 		AddReservationPage reservationObj = dashboardpage.clickNoConfirmation();
 		Assert.assertTrue(reservationObj.AddReservation(rowData.get("Select Source"),
+	                                                	rowData.get("Start Date"),
+		                                                        rowData.get("End Date"),
 																rowData.get("Reservation Prepaid"),
 																rowData.get("Car Color"),
 																rowData.get("Make"),
 																rowData.get("Model"),
 																rowData.get("License Plate"),
 																rowData.get("State")));
-
 	}
 
 	@Test(priority = 1, description = " Customer booked by Third Party Provider ",
@@ -49,6 +50,8 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		AddReservationPage reservationObj = dashboardpage.clickYesConfirmation();
 		Assert.assertTrue(reservationObj.AddReservation(rowData.get("Select Source"),
 																rowData.get("confirmation Number"),
+																rowData.get("Start Date"),
+		                                                        rowData.get("End Date"),
 																rowData.get("Prepaid Or Partial"),
 																rowData.get("Car Color"),
 																rowData.get("Make"),
@@ -75,8 +78,6 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 
 	 public void payPaymentByCard(Map<String, String> rowData) {
 		 
-		 System.out.println(rowData.get("Confirmation Number"));
-		 System.out.println("Checkbox***************************"+  rowData.get("Checkbox"));
 		AddReservationPage reservationObj = dashboardpage.clickLinkByConfirmationNumber(rowData.get("Confirmation Number"));
 		Assert.assertTrue(reservationObj.goToReceivePaymentCard(rowData.get("Card Information"))
 				                        .payPaymentByCard(rowData.get("Card Information"),
@@ -107,15 +108,4 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 				
 	}
 	
-	@Test(enabled =false, priority = 6, dataProvider = "CheckIn/KeyIn", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
-	public void checkInKeyIn(Map<String, String> rowData) throws InterruptedException
-	{
-		AddReservationPage reservationObj =dashboardpage.clickLinkByConfirmationNumber(rowData.get("confirmation Number"));
-		reservationObj.checkInKeyIn("Check In / Key In");
-	}
-	
-	
-	
-
-
 }

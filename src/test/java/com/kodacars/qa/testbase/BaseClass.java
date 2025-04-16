@@ -15,15 +15,11 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.aventstack.chaintest.plugins.ChainTestListener;
-import com.kodacars.qa.pageobjects.DashboardPage;
-import com.kodacars.qa.pageobjects.LoginPage;
 import com.kodacars.qa.uilities.ConfigFileReader;
 import com.kodacars.qa.uilities.ITestListenerClassFile;
 @Listeners({ChainTestListener.class,ITestListenerClassFile.class})
 public class BaseClass {
 	public static WebDriver driver;
-//	protected DashboardPage dashboardObj;
-//	protected LoginPage loginObj;
 
 	ConfigFileReader configFileReader = ConfigFileReader.getInstance();
 
@@ -33,13 +29,13 @@ public class BaseClass {
 		if (browser.equals("Chrome")) {
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-blink-features=Autofill");
-				options.setExperimentalOption("prefs", Map.of(
-				    "credentials_enable_service", false,
-				    "profile.password_manager_enabled", false,
-				    "autofill.credit_card_enabled", false,
-				    "autofill.profile_enabled", false
-				));
-			driver = new ChromeDriver(options);
+			options.setExperimentalOption("prefs", Map.of(
+			    "credentials_enable_service", false,
+			    "profile.password_manager_enabled", false,
+			    "autofill.credit_card_enabled", false,
+			    "autofill.profile_enabled", false
+			));
+			driver = new ChromeDriver();
 		} else if (browser.equals("Edge")) {
 			driver = new EdgeDriver();
 
@@ -56,7 +52,7 @@ public class BaseClass {
 	@AfterMethod
 	public void close() {
 		 if (driver != null) {
-			 //driver.quit();
+			 driver.quit();
 		    }
 	}
 
