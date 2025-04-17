@@ -77,7 +77,6 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		   dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class, dataProvider = "receivePaymentByCard")
 
 	 public void payPaymentByCard(Map<String, String> rowData) {
-		 
 		AddReservationPage reservationObj = dashboardpage.clickLinkByConfirmationNumber(rowData.get("Confirmation Number"));
 		Assert.assertTrue(reservationObj.goToReceivePaymentCard(rowData.get("Card Information"))
 				                        .payPaymentByCard(rowData.get("Card Information"),
@@ -107,4 +106,5 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		reservationObj.updateReservationokBtnIsDisplayed(rowData.get("Click Button"));
 				
 	}
-    }
+}
+

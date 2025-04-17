@@ -430,4 +430,16 @@ public class DemoClass {
 //	    System.out.println("✅ Due amount validated successfully: " + actualValue);
 //	}
 
+<<<<<<< HEAD
+<<<<<<< HEAD
 }
+=======
+<<<<<<< HEAD
+}
+=======
+}
+>>>>>>> main
+>>>>>>> ranjani
+=======
+}
+>>>>>>> branch 'main' of https://github.com/nithyaguna690/KodaCars_ParkingThatPays_Automation.git

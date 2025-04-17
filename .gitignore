@@ -1,12 +1,13 @@
+
 /target/
 /logs/
 /test-output/
 .classpath
 
 .settings/
-*.class
 
+.project
 /bin/
+
+/test-output/
 /allure-results/
-
-

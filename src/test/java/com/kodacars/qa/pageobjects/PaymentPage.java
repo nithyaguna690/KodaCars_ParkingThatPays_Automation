@@ -127,5 +127,4 @@ public class PaymentPage {
 		}
 		driver.switchTo().window(currentWindowHandle);
 	}
-
-}
+	}
