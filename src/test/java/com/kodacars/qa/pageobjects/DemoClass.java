@@ -431,6 +431,7 @@ public class DemoClass {
 //	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 <<<<<<< HEAD
@@ -439,3 +440,6 @@ public class DemoClass {
 }
 >>>>>>> main
 >>>>>>> ranjani
+=======
+}
+>>>>>>> branch 'main' of https://github.com/nithyaguna690/KodaCars_ParkingThatPays_Automation.git
