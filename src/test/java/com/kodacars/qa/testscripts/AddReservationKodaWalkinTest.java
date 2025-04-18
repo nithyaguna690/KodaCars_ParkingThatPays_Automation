@@ -151,9 +151,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		 dashboardpage.clickAddReservation();
 
          AddReservationPage reservationObj = dashboardpage.clickYesConfirmation();
- 		                    reservationObj.enterconfirmationNumber("BRHM1166265");
- 		                    		                    		
- 		                    		//rowData.get("Confirmation Number"));
+ 		                    reservationObj.enterconfirmationNumber(rowData.get("Confirmation Number"));
  		                    reservationObj.clicksearchBtn();
  				            reservationObj.Checkin_CashPayment(rowData.get("Card Information")).CheckinCashPayment();
  

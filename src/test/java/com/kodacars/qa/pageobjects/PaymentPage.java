@@ -81,6 +81,11 @@ public class PaymentPage {
 	@CacheLookup
 	WebElement OK; 
 	
+	@FindBy(xpath = "//div[text()='Assign Parking Slot']")
+	@CacheLookup
+	WebElement checkinpopup; 
+	
+	
 	@FindBy(xpath = "//button[normalize-space()='Check-In/ Key-In']")
 	@CacheLookup
 	WebElement Checkin;
@@ -229,11 +234,11 @@ public class PaymentPage {
 	
 	}
 
+
 	public AddReservationPage CheckinCashPayment() throws InterruptedException {
 	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 	    Thread.sleep(6000);
-	    driver.findElement(By.xpath("//div[text()='Assign Parking Slot']")).click();
-	//	((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight)");
+	    checkinpopup.click();
 		Thread.sleep(8000);
 		WebElement checkin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Check-In/ Key-In']")));
 		checkin.click();
@@ -245,5 +250,4 @@ public class PaymentPage {
 	
 	}
 	
-	
-}
+	}

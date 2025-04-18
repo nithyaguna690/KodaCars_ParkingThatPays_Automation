@@ -812,11 +812,10 @@ public void clickCollectPaymentButton() {
    	    parkingslotwindow.click();
    	    ReceivePayment.click();
    	    selectPaymentCash();
-  	   // String currentWindowHandle = driver.getWindowHandle();
   	    clickCollectPaymentButton();
   	    Thread.sleep(6000);
   	    isoKPaymentReceviedButtonDisplayed();
- 	    return new PaymentPage(driver);//, currentWindowHandle);
+ 	    return new PaymentPage(driver);
 	}
 	
 	public void checkout() throws InterruptedException{
