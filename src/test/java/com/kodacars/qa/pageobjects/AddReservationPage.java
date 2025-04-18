@@ -300,6 +300,7 @@ public class AddReservationPage {
 
 	public void enterstartDate(String StartDate) {
 		enterstartDate.sendKeys(StartDate);
+
 	}
 
 	public void enterstartTime() {
@@ -308,7 +309,6 @@ public class AddReservationPage {
 
 	public void enterEndDate(String EndDate) {
 		enterEndDate.sendKeys(EndDate);
-
 	}
 
 	public void enterEndTime() {
@@ -342,6 +342,7 @@ public class AddReservationPage {
 
 	public void validateDueAmount() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		boolean isPageLoaded = js.executeScript("return document.readyState").equals("complete");
 
@@ -399,17 +400,14 @@ public class AddReservationPage {
 		System.out.println(" Due amount is correct: " + actualDue);
 		js.executeScript("arguments[0].scrollIntoView(true);", dueField);
 		js.executeScript("arguments[0].click();", dueField);
-
 	}
 
 	public void clicksearchBtn() {
-
 		WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(searchBtn));
 		searchButton.click();
 	}
 
 	public void enterConfirmationNumber(String ConfirmationNum) {
-
 		WebElement confirmationField = wait.until(ExpectedConditions.visibilityOf(enterConfirmationNumber));
 		confirmationField.sendKeys(ConfirmationNum);
 	}
@@ -602,9 +600,8 @@ public class AddReservationPage {
 	}
 
 	// Test Koda And WalkIn Method
-	public boolean AddReservation(String sourceName, String StartDate, String EndDate, String prepaidPartial,
-			String carColor, String carMake, String carModel, String license, String state)
-			throws InterruptedException {
+	public boolean AddReservation(String sourceName, String StartDate, String EndDate, String prepaidPartial, String carColor, String carMake, 
+			                             String carModel, String license, String state) throws InterruptedException {
 		customerDetails(); // Enter the Customer Details
 		reservationDetails(sourceName, StartDate, EndDate); // Enter the Reservation Details
 		if (sourceName.equalsIgnoreCase("koda")) {
@@ -615,18 +612,13 @@ public class AddReservationPage {
 		boolean isOkBtnDispalyed = isReservationSuccessBtnDisplayed();
 		clickReservationSuccessBtn();
 		return isOkBtnDispalyed;
-
 	}
 
 	// Third Party Reservation Details
-	public boolean AddReservation(String sourceName, String confirmationNumber, String StartDate, String EndDate,
-			String PrepaidPartial, String carColor, String carMake, String carModel, String license, String state)
-			throws InterruptedException {
-
+	public boolean AddReservation(String sourceName, String confirmationNumber, String StartDate, String EndDate, String PrepaidPartial, String carColor, 
+			                             String carMake, String carModel, String license, String state) throws InterruptedException {
 		enterconfirmationNumber(confirmationNumber);
-
 		clickcreateManually();
-
 		customerDetails(); // Enter the Customer Details
 		reservationDetails(sourceName, StartDate, EndDate); // Enter the Reservation Details
 		selectReservationPrepaid(PrepaidPartial);
@@ -635,13 +627,11 @@ public class AddReservationPage {
 		validateDueAmount();
 		addVehicleDetails(carColor, carMake, carModel, license, state); // Enter the Add Vehicle Details
 		// largeSizeVehicleCheckBOx();
-
 		clickCreateReservation();
 		boolean isOkBtnDispalyed = isReservationSuccessBtnDisplayed();
 		System.out.println("Condition being tested: " + isOkBtnDispalyed);
 		clickReservationSuccessBtn();
 		return isOkBtnDispalyed;
-
 	}
 
 	public void clickOkButton() {
@@ -660,13 +650,12 @@ public class AddReservationPage {
 	}
 
 	public void okBtnUpdateReservation() {
-
 		WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Ok']")));
 		okButton.click();
 	}
 
-	public boolean okBtnisDisplayedupdate() {
 
+	public boolean okBtnisDisplayedupdate() {
 		WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Ok']")));
 		return okButton.isDisplayed();
 	}
@@ -763,20 +752,19 @@ public class AddReservationPage {
 	}
 
 	public AddReservationPage goToReceivePaymentCash() {
-
 		clickReceivePayment();
 		selectPaymentCash();
 		clickCollectPaymentButton();
 		return new AddReservationPage(driver);
 	}
-
+	
+	// **************CheckIn / Key In
 	public static boolean checkinstatus() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement status = wait
 				.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Edit Location']")));
 		Assert.assertTrue(status.isDisplayed());
 		return status.isDisplayed();
-
 	}
 
 	public boolean checkoutstatus() {
@@ -784,7 +772,6 @@ public class AddReservationPage {
 		WebElement status1 = wait
 				.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@value='CheckedOut']")));
 		return status1.isDisplayed();
-
 	}
 
 	public PaymentPage Checkin_CardPayment(String cardInformation) {
@@ -833,7 +820,30 @@ public class AddReservationPage {
 		wait.until(ExpectedConditions.elementToBeClickable(checkout_ok)).click();
 		System.out.println("Check out completed");
 		checkinstatus();
+	}
 
+	public void okBtnCheckIn() {
+		WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Ok']")));
+		okButton.click();
+	}
+	public void checkInKeyIn(String checkInButton) {
+		clickActionButtonBtnDisplayed(checkInButton);
+		clickcheckInKeyInBtn();
+		okBtnCheckIn();
+		clickUpdateLocation();
+
+	}
+
+	public void clickcheckInKeyInBtn() {
+		WebElement okButton = wait.until(
+				ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Check-In/ Key-In')]")));
+		okButton.click();
+	}
+
+	public void clickUpdateLocation() {
+		WebElement updateButton = wait.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("//div[@id='gridContainer']//button[text()='Update Location']")));
+		updateButton.click();
 	}
 
 }

@@ -12,7 +12,7 @@ public class ExcelDataProvider {
 	private static final String UPDATE_RESERVATION = "UpdateReservation";
 	private static final String CHECKIN_CARD = "CheckinCard";
 	private static final String CHECKIN_CASH = "CheckinCash";
-	
+
 	@DataProvider(name = "KodaWalkIn")
 	public static Object[][] kodaWalkInDataProvider() {
 		Object[][] data = CommonDataProvider.getAllRows(KODA_WALKIN_SHEET);

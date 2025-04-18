@@ -22,16 +22,16 @@ public class DashboardPage {
 
 	WebDriver driver;
 	WebDriverWait wait;
-        WebDriverWait longwait;
+	WebDriverWait longwait;
 	CommonUtils utilsObj = CommonUtils.getInstance(driver);
-	
+
 	public DashboardPage(WebDriver driver) {
 
 		if (driver == null) {
 			throw new IllegalArgumentException("Driver instance cannot be null");
 		}
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-                this.longwait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		this.longwait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
@@ -47,9 +47,6 @@ public class DashboardPage {
 	@FindBy(xpath = "//button[text()='Yes']")
 	@CacheLookup
 	private WebElement clickYesConfirmation;
-	
-
-	
 
 	public boolean isAddReservationBtnDisplayed() {
 		return addReservation.isDisplayed();
@@ -89,8 +86,6 @@ public class DashboardPage {
 		}
 	}
 
-	
-
 	public AddReservationPage clickLinkByConfirmationNumber(String confirmationNumber) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		WebElement confirmCell = wait.until(ExpectedConditions.presenceOfElementLocated(
@@ -98,5 +93,4 @@ public class DashboardPage {
 		confirmCell.click();
 		return new AddReservationPage(driver);
 	}
-
 }
