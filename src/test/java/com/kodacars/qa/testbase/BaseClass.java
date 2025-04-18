@@ -15,7 +15,6 @@ import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 import com.aventstack.chaintest.plugins.ChainTestListener;
-
 import com.kodacars.qa.uilities.ConfigFileReader;
 import com.kodacars.qa.uilities.ITestListenerClassFile;
 @Listeners({ChainTestListener.class,ITestListenerClassFile.class})
@@ -50,12 +49,11 @@ public class BaseClass {
 		driver.get(ConfigFileReader.getLoginUrl());
 	}
 
-	//@AfterMethod
+	@AfterMethod
 	public void close() {
 		 if (driver != null) {
 		       driver.quit();
 		    }
 	}
-
 
 }

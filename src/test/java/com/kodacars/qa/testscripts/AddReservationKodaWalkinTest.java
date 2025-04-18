@@ -156,5 +156,5 @@ public class AddReservationKodaWalkinTest extends BaseClass {
  				            reservationObj.Checkin_CashPayment(rowData.get("Card Information")).CheckinCashPayment();
  
 	}
-	
+
 }
