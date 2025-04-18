@@ -1,10 +1,12 @@
 package com.kodacars.qa.pageobjects;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -62,6 +64,9 @@ public class PaymentPage {
 	@FindBy(id="enableStripePass")
 	WebElement phoneNoCheckbox ;
 	
+    @FindBy(id = "phoneNumber")
+	WebElement phoneNoTextBox;
+    
 	@FindBy(xpath="//div[@class='SubmitButton-IconContainer']")
 	WebElement payButton ;
 	
@@ -75,25 +80,24 @@ public class PaymentPage {
 	@FindBy(xpath = "//button[text()='OK']")
 	@CacheLookup
 	WebElement OK; 
-	//@FindBy(xpath = "//button[normalize-space()='Check-In/ Key-In']")
-//	@CacheLookup
-//	WebElement Checkin;
-
 	
+	@FindBy(xpath = "//button[normalize-space()='Check-In/ Key-In']")
+	@CacheLookup
+	WebElement Checkin;
 
-   @FindBy(xpath = "//button[text()='Ok']")
-   @CacheLookup
-   WebElement ok;
+    @FindBy(xpath = "//button[text()='Ok']")
+    @CacheLookup
+    WebElement ok;
    
-   @FindBy(xpath="//input[@value='CheckedIn']")
-   @CacheLookup
-   WebElement status;
+    @FindBy(xpath="//input[@value='CheckedIn']")
+    @CacheLookup
+    WebElement status;
    
    @FindBy(xpath="//button[text()='Edit Location']")
    @CacheLookup
    WebElement EditLocation;
    
-   @FindBy(xpath="//label[text()='Parking Loc']/following-sibling::p-dropdown")
+   @FindBy(xpath="//span[text()='Select Location']")
    @CacheLookup
    WebElement selectParkLocMenu;
  
@@ -112,143 +116,131 @@ public class PaymentPage {
    @FindBy(xpath="//button[text()='Update Location']")
    @CacheLookup
    WebElement UpdateLocation;
-   
-   @FindBy(xpath="//*[@class='CheckoutInput PhoneNumberInput-input SignUpForm-phoneInput CheckoutInput--hasPlaceholderIcon Input Input--empty']")
-   @CacheLookup
-   WebElement Phonenumber;
-   
- 
+
+   @FindBy(xpath = "//div[@class='OtpInput']/input")
+	List<WebElement> sixDigitTextbox;
 	
- 	public AddReservationPage payPaymentByCard(String cardInformation,String cardExpiry ,String cvcNo, String cardName, String zip, String email) {
-		payPaymentCardWithoutPhoneNo(cardInformation, cardExpiry, cvcNo, cardName, zip, email);
+   public AddReservationPage payPaymentByCard(String cardInformation, String cardExpiry, String cvcNo, String cardName,
+			String zip, String email,String checkBoxStatus, String phoneNo) {
+		payPament(cardInformation, cardExpiry, cvcNo, cardName, zip, email, checkBoxStatus, phoneNo);
+		return new AddReservationPage(driver);
+
+	}
+	public void okBtnforlocationupdate() {
+
+		WebElement okButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Ok']")));
+		okButton.click();
+	}
+	
+  private void payPament(String cardInformation, String cardExpiry, String cvcNo, String cardName, String zip,
+			String email, String checkBoxStatus, String phoneNo) {
+		new WebDriverWait(driver, Duration.ofSeconds(10)).until(driver1 -> driver1.getWindowHandles().size() > 1);
+
+		Set<String> windowHandles = driver.getWindowHandles();
+		for (String windowHandle : windowHandles) {
+
+			if (!windowHandle.equalsIgnoreCase(currentWindowHandle)) {
+				driver.switchTo().window(windowHandle);
+				WebElement emailTxt = wait
+						.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("main form input[id='email']")));				
+
+				int width = cardButton.getSize().getWidth();
+				int height = cardButton.getSize().getHeight();
+				int xOffset = (int) (width * 0.75);
+				int yOffset = height / 2;
+
+				Actions actions = new Actions(driver);
+				actions.moveToElement(cardButton, xOffset, yOffset).click().perform();
+				cardInforationTextbox.sendKeys(cardInformation);
+				cardExpiryTextbox.sendKeys(cardExpiry);
+				cvcTextbox.sendKeys(cvcNo);
+				billingNameTextbox.sendKeys(cardName);
+				actions.moveToElement(zipTextbox).click().sendKeys(zip).build().perform();
+				zipTextbox.sendKeys(zip);
+				if(checkBoxStatus.equalsIgnoreCase("TRUE")) {
+					phoneNoTextBox.sendKeys(phoneNo);
+				}
+				else {
+					actions.click(phoneNoCheckbox).perform();					
+				}
+				emailTxt.sendKeys(email);
+				
+				if(wait.until(ExpectedConditions.visibilityOf(emailTxt)).isDisplayed()) {
+					for(WebElement element: sixDigitTextbox)
+					{
+						element.sendKeys("0");
+					}
+					
+				}
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", payButton);
+				wait.until(ExpectedConditions.visibilityOf(successMessageLable));
+
+				driver.close();
+				break;
+			}
+		}
+		driver.switchTo().window(currentWindowHandle);
+	}
+
+	public AddReservationPage CheckinCardPayment(String cardInformation, String cardExpiry, String cvcNo, String cardName, String zip,
+			String email, String checkBoxStatus, String phoneNo) throws InterruptedException {
+		
+		Actions actions = new Actions(driver);
+		payPament( cardInformation,cardExpiry, cvcNo, cardName, zip, email,checkBoxStatus, phoneNo);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50)); 
+		wait.until(ExpectedConditions.elementToBeClickable(popup)).click();
+		wait.until(ExpectedConditions.elementToBeClickable(OK)).click();
+		WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(60));
+	    wait1.until(ExpectedConditions.visibilityOf(Checkin));
+		Thread.sleep(6000);
+	    Checkin.click();		
+		Thread.sleep(6000);
+		wait.until(ExpectedConditions.elementToBeClickable(ok)).click();
+		Thread.sleep(6000);
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", EditLocation);
+		wait.until(ExpectedConditions.elementToBeClickable(EditLocation)).click();
+	    wait.until(ExpectedConditions.elementToBeClickable(selectParkLocMenu)).click();
+	    actions.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
+	    wait.until(ExpectedConditions.elementToBeClickable(Location)).click();
+	    actions.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
+	    Thread.sleep(6000);
+		wait.until(ExpectedConditions.elementToBeClickable(UpdateLocation)).click();
+		okBtnforlocationupdate();
+	
+	return new AddReservationPage(driver);
+	
+	}
+	
+	public AddReservationPage UpdateLocation()throws InterruptedException {
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50)); 
+		Actions actions = new Actions(driver);
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", EditLocation);
+		wait.until(ExpectedConditions.elementToBeClickable(EditLocation)).click();
+	    wait.until(ExpectedConditions.elementToBeClickable(selectParkLocMenu)).click();
+	    actions.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
+	    wait.until(ExpectedConditions.elementToBeClickable(Location)).click();
+	    actions.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).perform();
+	    Thread.sleep(6000);
+		wait.until(ExpectedConditions.elementToBeClickable(UpdateLocation)).click();
+		okBtnforlocationupdate();
 		return new AddReservationPage(driver);
 	
 	}
 
-	public void payPaymentCardWithoutPhoneNo(String cardInformation, String cardExpiry, String cvcNo, String cardName, String zip,
-			String email) {
-		new WebDriverWait(driver, Duration.ofSeconds(10)).until(driver1 -> driver1.getWindowHandles().size() > 1);
-
-	Set<String> windowHandles = driver.getWindowHandles();
-		for (String windowHandle : windowHandles) {
-			System.out.println("**************windowHandle*******************" + windowHandle);
-
-			if (!windowHandle.equalsIgnoreCase(currentWindowHandle)) {
-				driver.switchTo().window(windowHandle);
-				WebElement emailTxt = wait.until(
-						ExpectedConditions.visibilityOfElementLocated(By.cssSelector("main form input[id='email']")));
-
-				int width = cardButton.getSize().getWidth();
-				int height = cardButton.getSize().getHeight();
-				int xOffset = (int) (width * 0.75); 
-				int yOffset = height / 2; 
-
-				Actions actions = new Actions(driver);
-				actions.moveToElement(cardButton, xOffset, yOffset).click().perform();
-				actions.moveToElement(cardInforationTextbox).click().sendKeys(cardInformation).build().perform();
-				actions.moveToElement(cardExpiryTextbox).click().sendKeys(cardExpiry).build().perform();
-				actions.moveToElement(cvcTextbox).click().sendKeys(cvcNo).build().perform();
-				actions.moveToElement(billingNameTextbox).click().sendKeys(cardName).build().perform();
-				actions.moveToElement(zipTextbox).click().sendKeys(zip).build().perform();				
-				actions.click(phoneNoCheckbox).perform();
-				actions.moveToElement(emailTxt).click().sendKeys(email).build().perform();
-
-				JavascriptExecutor js = (JavascriptExecutor) driver;				
-				js.executeScript("arguments[0].click();", payButton);
-
-				//By successMessageLable = By.xpath("//h1[text()='Payment Successful']");
-			    wait.until(ExpectedConditions.visibilityOf(successMessageLable));
-						
-
-
-				driver.close();
-				break;
-
-			}
-
-	}	driver.switchTo().window(currentWindowHandle);
-	System.out.println("------------------------------" +currentWindowHandle);
-	}
-	public void payPaymentCardWithPhoneNo(String cardInformation, String cardExpiry, String cvcNo, String cardName, String zip,
-			String email) {
-		new WebDriverWait(driver, Duration.ofSeconds(10)).until(driver1 -> driver1.getWindowHandles().size() > 1);
-
-	Set<String> windowHandles = driver.getWindowHandles();
-		for (String windowHandle : windowHandles) {
-
-			if (!windowHandle.equalsIgnoreCase(currentWindowHandle)) {
-				driver.switchTo().window(windowHandle);
-				WebElement emailTxt = wait.until(
-						ExpectedConditions.visibilityOfElementLocated(By.cssSelector("main form input[id='email']")));
-
-				int width = cardButton.getSize().getWidth();
-				int height = cardButton.getSize().getHeight();
-				int xOffset = (int) (width * 0.75); 
-				int yOffset = height / 2; 
-
-				Actions actions = new Actions(driver);
-				actions.moveToElement(cardButton, xOffset, yOffset).click().perform();
-				actions.moveToElement(cardInforationTextbox).click().sendKeys(cardInformation).build().perform();
-				actions.moveToElement(cardExpiryTextbox).click().sendKeys(cardExpiry).build().perform();
-				actions.moveToElement(cvcTextbox).click().sendKeys(cvcNo).build().perform();
-				actions.moveToElement(billingNameTextbox).click().sendKeys(cardName).build().perform();
-				actions.moveToElement(zipTextbox).click().sendKeys(zip).build().perform();				
-				wait.until(ExpectedConditions.elementToBeClickable(Phonenumber));
-				Phonenumber.click();
-				Phonenumber.sendKeys("2487676786");
-	    		actions.moveToElement(emailTxt).click().sendKeys(email).build().perform();
-
-				JavascriptExecutor js = (JavascriptExecutor) driver;				
-				js.executeScript("arguments[0].click();", payButton);
-
-				//By successMessageLable = By.xpath("//h1[text()='Payment Successful']");
-			  wait.until(ExpectedConditions.visibilityOf(successMessageLable));
-						
-
-
-				driver.close();
-				break;
-
-			}
-
-	}	driver.switchTo().window(currentWindowHandle);
-	}
-	public AddReservationPage CheckinPaymentByCard(String cardInformation,String cardExpiry ,String cvcNo, String cardName, String zip, String email) throws InterruptedException {
-		payPaymentCardWithoutPhoneNo(cardInformation, cardExpiry, cvcNo, cardName, zip, email);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50)); 
-
-		//wait.until(ExpectedConditions.elementToBeClickable(popup)).click();
-		wait.until(ExpectedConditions.elementToBeClickable(OK)).click();
-		
-		WebElement Checkin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='assignParkingSlot']/div/div/div[3]/button")));
-       Thread.sleep(1500);
-		System.out.println(driver.findElement(By.xpath("//label[text()='Start Date and Time']")).getText() + "+++ I am Here ++++");
-		Actions actions = new Actions(driver);
-		actions.moveToElement(Checkin).click().build().perform();
-		Thread.sleep(1500);
-		System.out.println(driver.findElement(By.xpath("//label[text()='Start Date and Time']")).getText() + "+++ I am after Action Here ++++");
-
-//		WebElement window =wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Assign Parking Slot']")));
-//		window.click();
-	//	 WebDriverWait wait1 = new WebDriverWait(driver, Duration.ofSeconds(60));
-		//	WebElement Checkin = wait1.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='assignParkingSlot']/div/div/div[3]/button")));
-		//	 Checkin.click();
-		
-		   //wait1.until(ExpectedConditions.visibilityOf(Checkin));
-		  //.click();
-		//wait.until(ExpectedConditions.visibilityOf(checkin)).click();
-		//wait.until(ExpectedConditions.elementToBeClickable(checkin)).click();
+	public AddReservationPage CheckinCashPayment() throws InterruptedException {
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+	    Thread.sleep(6000);
+	    driver.findElement(By.xpath("//div[text()='Assign Parking Slot']")).click();
+	//	((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight)");
+		Thread.sleep(8000);
+		WebElement checkin = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Check-In/ Key-In']")));
+		checkin.click();
 		wait.until(ExpectedConditions.elementToBeClickable(ok)).click();
-		wait.until(ExpectedConditions.elementToBeClickable(status)).click();
-		
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,650)");
-		  wait.until(ExpectedConditions.elementToBeClickable(EditLocation)).click();
-	      wait.until(ExpectedConditions.elementToBeClickable(selectParkLocMenu)).click();
-		  wait.until(ExpectedConditions.elementToBeClickable(selectParkLoc)).click();
-		  wait.until(ExpectedConditions.elementToBeClickable(Location)).click();
-		  wait.until(ExpectedConditions.elementToBeClickable(SelectLocation)).click();
-		  wait.until(ExpectedConditions.elementToBeClickable(UpdateLocation)).click();
-
+		Thread.sleep(6000);
+	    UpdateLocation();
+	
 	return new AddReservationPage(driver);
 	
 	}

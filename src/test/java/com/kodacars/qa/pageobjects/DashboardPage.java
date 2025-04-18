@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.CacheLookup;
@@ -21,6 +22,7 @@ public class DashboardPage {
 
 	WebDriver driver;
 	WebDriverWait wait;
+        WebDriverWait longwait;
 	CommonUtils utilsObj = CommonUtils.getInstance(driver);
 	
 	public DashboardPage(WebDriver driver) {
@@ -29,6 +31,7 @@ public class DashboardPage {
 			throw new IllegalArgumentException("Driver instance cannot be null");
 		}
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+                this.longwait = new WebDriverWait(driver, Duration.ofSeconds(30));
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 	}
@@ -45,13 +48,6 @@ public class DashboardPage {
 	@CacheLookup
 	private WebElement clickYesConfirmation;
 	
-	@FindBy(xpath = "//p-dropdown[@placeholder='Select Location']")
-	@CacheLookup
-	private WebElement Location;
-		
-	@FindBy(xpath = "//li/*[contains(text(),'Barcelona')]")
-	@CacheLookup
-	private WebElement Barcelona;
 
 	
 
@@ -64,13 +60,6 @@ public class DashboardPage {
 		clickNoConfirmation.click();
 		return new AddReservationPage(driver);
 
-	}
-	public AddReservationPage Select_barcelona() {
-		utilsObj.visibilityOfMoreWaitTime(Location);
-		Location.click();
-		utilsObj.visibilityOfMoreWaitTime(Barcelona);
-		Barcelona.click();
-		return new AddReservationPage(driver);
 	}
 
 	public AddReservationPage clickYesConfirmation() {

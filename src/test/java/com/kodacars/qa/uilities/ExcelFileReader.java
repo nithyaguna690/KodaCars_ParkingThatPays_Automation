@@ -14,9 +14,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelFileReader {
@@ -52,7 +50,7 @@ public class ExcelFileReader {
 	    case NUMERIC:
 	        if (DateUtil.isCellDateFormatted(cell)) {
 	            Date date = cell.getDateCellValue();
-	            return new SimpleDateFormat("M/d").format(date); 
+	            return new SimpleDateFormat("MM/dd/yyyy").format(date); 
 	        } else {
 	            double value = cell.getNumericCellValue();
 	            if (value == (long) value) {
@@ -61,6 +59,8 @@ public class ExcelFileReader {
 	                return String.valueOf(value); // Keep decimal if needed   78956.2365
 	            }
 	        }
+             case BOOLEAN:
+	    	return String.valueOf(cell.getBooleanCellValue());
 	    case BLANK:
 	        return "";
 	    default:
