@@ -16,15 +16,13 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.kodacars.qa.uilities.CommonUtils;
 
 public class DashboardPage {
 
 	WebDriver driver;
 	WebDriverWait wait;
 	WebDriverWait longwait;
-	CommonUtils utilsObj = CommonUtils.getInstance(driver);
-
+	
 	public DashboardPage(WebDriver driver) {
 
 		if (driver == null) {
@@ -60,28 +58,20 @@ public class DashboardPage {
 //	}
 	
 	public AddReservationPage clickNoConfirmation() {
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-	    WebElement noButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='No']")));
+	    WebElement noButton = longwait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='No']")));
 	    noButton.click();
 	    return new AddReservationPage(driver);
 	}
 
-
-//	public AddReservationPage clickYesConfirmation() {
-//		utilsObj.visibilityOfMoreWaitTime(clickYesConfirmation);
-//		clickYesConfirmation.click();
-//		return new AddReservationPage(driver);
-//	}
-	
 	public AddReservationPage clickYesConfirmation() {
-	   // WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-	    WebElement yesButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Yes']")));
+	    WebElement yesButton = longwait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Yes']")));
 	    yesButton.click();
 	    return new AddReservationPage(driver);
 	}
 
 
 	public void clickAddReservation() {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		// Ensure modal or overlay disappears before clicking
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("modal-backdrop")));
 	
@@ -98,14 +88,6 @@ public class DashboardPage {
 		}
 	}
 
-//	public AddReservationPage clickLinkByConfirmationNumber(String confirmationNumber) {
-//		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-//		WebElement confirmCell = wait.until(ExpectedConditions.presenceOfElementLocated(
-//				By.xpath("//span[contains(@class,'ag-cell-value') and text()='" + confirmationNumber + "']")));
-//		confirmCell.click();
-//		return new AddReservationPage(driver);
-//	}
-	
 	public AddReservationPage clickLinkByConfirmationNumber(String confirmationNumber) {
 	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 	    By nextPageBtn = By.cssSelector("div[ref='btNext']");
@@ -117,7 +99,7 @@ public class DashboardPage {
 	    );
 
 	    for (int i = 1; i <= maxPages; i++) {
-	        System.out.println("🔍 Searching for confirmation number on page " + i + " of " + maxPages);
+	        System.out.println("Searching for confirmation number on page " + i + " of " + maxPages);
 
 	        List<WebElement> matchingCells = driver.findElements(confirmationCellXpath);
 	        if (!matchingCells.isEmpty()) {
@@ -131,7 +113,7 @@ public class DashboardPage {
 	        }
 	    }
 
-	    throw new NoSuchElementException("❌ Confirmation number '" + confirmationNumber + "' not found on any page.");
+	    throw new NoSuchElementException("Confirmation number '" + confirmationNumber + "' not found on any page.");
 	}
 
 	public void safeClick(By locator) {
@@ -145,7 +127,7 @@ public class DashboardPage {
 
 	        wait.until(ExpectedConditions.elementToBeClickable(element)).click();
 	    } catch (ElementClickInterceptedException e) {
-	        System.out.println("⚠️ Click intercepted. Retrying with JS click on locator: " + locator);
+	        System.out.println("Click intercepted. Retrying with JS click on locator: " + locator);
 	        WebElement element = driver.findElement(locator);
 	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 	    }
@@ -167,7 +149,7 @@ public class DashboardPage {
 	            return true; // All overlays gone
 	        });
 	    } catch (TimeoutException e) {
-	        System.out.println("⚠️ Overlays or spinners may still be visible after timeout.");
+	        System.out.println("Overlays or spinners may still be visible after timeout.");
 	    }
 	}
 
@@ -178,7 +160,7 @@ public class DashboardPage {
 	        // Check for the invisibility of the AG Grid loading spinner
 	        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".ag-overlay-loading-center")));
 	    } catch (TimeoutException e) {
-	        System.out.println("⚠️ AG Grid did not finish loading within timeout.");
+	        System.out.println("AG Grid did not finish loading within timeout.");
 	    }
 	}
 
