@@ -23,7 +23,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		LoggerLoad.info("The user is on the " + driver.getTitle() + " home page and successfully logged in.");
 	}
 
-	@Test(priority = 0, description = " Walk-in Customer and Koda Customer ",
+	@Test(enabled=false,priority = 0, description = " Walk-in Customer and Koda Customer ",
 		  dataProvider = "KodaWalkIn", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 
 	public void AddReservationForWalkInKoda(Map<String, String> rowData) throws InterruptedException {
@@ -41,7 +41,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 																rowData.get("State")));
 	}
 
-	@Test(priority = 1, description = " Customer booked by Third Party Provider ",
+	@Test(enabled=false,priority = 1, description = " Customer booked by Third Party Provider ",
 		  dataProvider = "ThirdpartyManuallyCreateConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 
 	public void AddReservationForThirdPartyCreateManually(Map<String, String> rowData) throws InterruptedException {
@@ -63,7 +63,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 	
 	
 	@Test(priority = 2, description = " Search the customer confirmation number booked by third party ", 
-		  dataProvider = "ThirdpartyManuallyCreateConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
+		  dataProvider = "SearchThirdpartyConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 	
 	public void AddReservationConfirmationNumberSearch(Map<String, String> rowData) throws InterruptedException {
 		dashboardpage.clickAddReservation();

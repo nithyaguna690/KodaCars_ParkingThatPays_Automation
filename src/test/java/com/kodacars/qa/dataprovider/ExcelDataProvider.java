@@ -6,7 +6,7 @@ public class ExcelDataProvider {
 
 	private static final String KODA_WALKIN_SHEET = "KodaWalkIn";
 	private static final String THIRDPARTY_MANUALLY_CREATED_CONFIRMATION_NUMBER_SHEET = "ThirdParty";
-	private static final String SEARCH_THIRDPARTY_CONFIRMATION_NUMEBR = "ThirdPartySearchConfirmationNum";
+	private static final String SEARCH_THIRDPARTY_CONFIRMATION_NUMEBR = "SearchThirdParty";
 	private static final String CARD_PAYMENT = "CardPayment";
 	private static final String CASH_PAYMENT = "CashPayment";
 	private static final String UPDATE_RESERVATION = "UpdateReservation";

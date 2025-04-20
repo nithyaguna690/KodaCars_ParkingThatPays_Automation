@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+    <listeners>
+        <listener class-name="com.kodacars.qa.uilities.ITestListenerClassFile" />
+    </listeners>
+
+    <test name="Test">
+        <classes>
+            
+            <!-- Run specific methods from AddReservationKodaWalkinTest -->
+            <class name="com.kodacars.qa.testscripts.AddReservationKodaWalkinTest">
+                <methods>
+                <!--
+                -->
+                    <include name="AddReservationForWalkInKoda"/>
+                
+                    <include name="AddReservationForThirdPartyCreateManually"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
