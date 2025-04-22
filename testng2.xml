@@ -11,8 +11,7 @@
             <!-- Run specific methods from AddReservationKodaWalkinTest -->
             <class name="com.kodacars.qa.testscripts.AddReservationKodaWalkinTest">
                 <methods>
-                <!--
-                -->
+              
                     <include name="AddReservationForWalkInKoda"/>
                 
                     <include name="AddReservationForThirdPartyCreateManually"/>

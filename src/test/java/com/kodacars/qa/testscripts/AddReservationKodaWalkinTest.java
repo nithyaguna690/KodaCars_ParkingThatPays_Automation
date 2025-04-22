@@ -22,8 +22,8 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 		dashboardpage = loginPage.login(ConfigFileReader.getUsername(), ConfigFileReader.getPassword());
 		LoggerLoad.info("The user is on the " + driver.getTitle() + " home page and successfully logged in.");
 	}
-
-	@Test(enabled=false,priority = 0, description = " Walk-in Customer and Koda Customer ",
+//enabled=false,
+	@Test(priority = 0, description = " Walk-in Customer and Koda Customer ",
 		  dataProvider = "KodaWalkIn", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 
 	public void AddReservationForWalkInKoda(Map<String, String> rowData) throws InterruptedException {
@@ -41,7 +41,7 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 																rowData.get("State")));
 	}
 
-	@Test(enabled=false,priority = 1, description = " Customer booked by Third Party Provider ",
+	@Test(priority = 1, description = " Customer booked by Third Party Provider ",
 		  dataProvider = "ThirdpartyManuallyCreateConfirmationNumber", dataProviderClass = com.kodacars.qa.dataprovider.ExcelDataProvider.class)
 
 	public void AddReservationForThirdPartyCreateManually(Map<String, String> rowData) throws InterruptedException {
@@ -57,7 +57,8 @@ public class AddReservationKodaWalkinTest extends BaseClass {
 																rowData.get("Make"),
 																rowData.get("Model"),
 																rowData.get("License Plate"),
-																rowData.get("State")));
+																rowData.get("State"),
+																rowData.get("Oversize Category")));
 	}
 
 	
