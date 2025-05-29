@@ -49,7 +49,7 @@ public class BaseClass {
 		driver.get(ConfigFileReader.getLoginUrl());
 	}
 
-	@AfterMethod
+	//@AfterMethod
 	public void close() {
 		 if (driver != null) {
 			 driver.quit();
