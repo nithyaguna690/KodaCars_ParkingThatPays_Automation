@@ -180,11 +180,11 @@ public class AddReservationPage {
 	@FindBy(xpath = "//span[text()='Select Payment Mode']")
 	private WebElement selectPaymentModeDDB;
 
-	@FindBy(xpath = "//p-dropdownitem[contains(@class,'p-element ng-tns-c53-18 ng-star-inserted')]//span[@class='ng-star-inserted' and text()='Card']")
-	private WebElement cardOption;
-
-	@FindBy(xpath = "//p-dropdownitem[contains(@class,'p-element ng-tns-c53-18 ng-star-inserted')]//span[@class='ng-star-inserted' and text()='Cash']")
-	private WebElement cashOption;
+	@FindBy(xpath="//p-dropdownitem[2]//*[contains(text(),'Card')]")
+	private WebElement card;
+	
+	@FindBy(xpath="//p-dropdownitem//*[contains(text(),'Cash')]")
+	private WebElement cash;
 
 	@FindBy(xpath = "(//button[text()='Pay Now'])[2]")
 	private WebElement payNowBtn;
@@ -876,16 +876,6 @@ public class AddReservationPage {
 		}
 	}
 
-	public void selectPaymentCard() {
-		safeClick(selectPaymentMode);
-		cardOption.click();
-	}
-
-	public void selectPaymentCash() {
-		safeClick(selectPaymentMode);
-		cashOption.click();
-	}
-
 	public void enterCardReferenceNumber(String cardRefNumber) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		WebElement cardRefInput = wait
@@ -904,7 +894,7 @@ public class AddReservationPage {
 
 		clickReceivePayment();
 		String currentWindowHandle = driver.getWindowHandle();
-		selectPaymentCard();
+		selectCardPayment();
 		enterCardReferenceNumber(cardInformation);
 		payNowBtn.click();
 		return new PaymentPage(driver, currentWindowHandle);
@@ -916,7 +906,7 @@ public class AddReservationPage {
 
 	public AddReservationPage goToReceivePaymentCash() {
 		clickReceivePayment();
-		selectPaymentCash();
+		selectCashPayment();
 		clickCollectPaymentButton();
 		return new AddReservationPage(driver);
 	}
@@ -936,7 +926,7 @@ public class AddReservationPage {
 		return status1.isDisplayed();
 	}
 
-	public PaymentPage Checkin_CardPayment(String cardInformation) {
+	public PaymentPage Checkin_CardPayment(String cardInformation) throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
 		((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight)");
 		WebElement checkin = wait
@@ -947,7 +937,7 @@ public class AddReservationPage {
 				By.xpath("//div[@id='assignParkingSlot']//div[contains(text(),'Reservation No: ')]")));
 		parkingslotwindow.click();
 		ReceivePayment.click();
-		selectPaymentCard();
+		selectCardPayment();
 		String currentWindowHandle = driver.getWindowHandle();
 		payNowBtn.click();
 		return new PaymentPage(driver, currentWindowHandle);
@@ -964,7 +954,7 @@ public class AddReservationPage {
 				By.xpath("//div[@id='assignParkingSlot']//div[contains(text(),'Reservation No: ')]")));
 		parkingslotwindow.click();
 		ReceivePayment.click();
-		selectPaymentCash();
+		selectCashPayment();
 		clickCollectPaymentButton();
 		Thread.sleep(6000);
 		isoKPaymentReceviedButtonDisplayed();
@@ -973,9 +963,8 @@ public class AddReservationPage {
 
 	public void checkout() throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		wait.until(ExpectedConditions.elementToBeClickable(Checkout)).click();
 		((JavascriptExecutor) driver).executeScript("window.scrollBy(0,650)");
+		wait.until(ExpectedConditions.elementToBeClickable(Checkout)).click();
 		wait.until(ExpectedConditions.elementToBeClickable(Checkout_click)).click();
 		wait.until(ExpectedConditions.elementToBeClickable(ConfirmPayment)).click();
 		wait.until(ExpectedConditions.elementToBeClickable(yes)).click();
@@ -1009,4 +998,12 @@ public class AddReservationPage {
 		updateButton.click();
 	}
 
+	public void selectCardPayment() {
+		safeClick(selectPaymentMode);
+		card.click();
+	}
+	public void selectCashPayment() {
+		safeClick(selectPaymentMode);
+		cash.click();
+	}
 }
