@@ -952,9 +952,7 @@ public class AddReservationPage {
 		WebElement parkingslotwindow = wait.until(ExpectedConditions.visibilityOfElementLocated(
 				By.xpath("//div[@id='assignParkingSlot']//div[contains(text(),'Reservation No: ')]")));
 		parkingslotwindow.click();
-		//Thread.sleep(2500);
 		ReceivePayment.click();
-		//Thread.sleep(2500);
 		selectCardPayment();
 		String currentWindowHandle = driver.getWindowHandle();
 		payNowBtn.click();
