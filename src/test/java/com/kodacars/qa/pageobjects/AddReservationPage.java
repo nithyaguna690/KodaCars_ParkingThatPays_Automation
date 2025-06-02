@@ -180,17 +180,11 @@ public class AddReservationPage {
 	@FindBy(xpath = "//span[text()='Select Payment Mode']")
 	private WebElement selectPaymentModeDDB;
 
-	@FindBy(xpath = "//p-dropdownitem[contains(@class,'p-element ng-tns-c53-18 ng-star-inserted')]//span[@class='ng-star-inserted' and text()='Card']")
-	private WebElement cardOption;
-
 	@FindBy(xpath="//p-dropdownitem[2]//*[contains(text(),'Card')]")
 	private WebElement card;
 	
 	@FindBy(xpath="//p-dropdownitem//*[contains(text(),'Cash')]")
 	private WebElement cash;
-	
-	@FindBy(xpath = "//p-dropdownitem[contains(@class,'p-element ng-tns-c53-18 ng-star-inserted')]//span[@class='ng-star-inserted' and text()='Cash']")
-	private WebElement cashOption;
 
 	@FindBy(xpath = "(//button[text()='Pay Now'])[2]")
 	private WebElement payNowBtn;
@@ -880,16 +874,6 @@ public class AddReservationPage {
 			System.out.println("Click intercepted. Retrying with JS click.");
 			((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 		}
-	}
-
-	public void selectPaymentCard() {
-		safeClick(selectPaymentMode);
-		cardOption.click();
-	}
-	
-	public void selectPaymentCash() {
-		safeClick(selectPaymentMode);
-		cashOption.click();
 	}
 
 	public void enterCardReferenceNumber(String cardRefNumber) {
